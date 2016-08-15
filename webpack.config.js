@@ -21,7 +21,7 @@ fs.readdirSync(contracts_directory).forEach(function(file) {
 });
 
 module.exports = {
-  entry: './app/javascripts/app.js',
+  entry: './app/javascripts/app.jsx',
   output: {
     path: "./build",
     filename: 'app.js'

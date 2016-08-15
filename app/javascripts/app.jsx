@@ -1,7 +1,7 @@
 require("../stylesheets/app.css");
 import React, { Component, PropTypes } from 'react';
 var Web3 = require("web3");
-import App from '../components/App/App.js';
+import App from '../components/App/App.jsx';
 var ReactDOM = require('react-dom');
 
 var accounts;
@@ -74,4 +74,6 @@ window.onload = function() {
       document.getElementById('content')
     );
   });
+  window.web3 = web3;
+  window.TrustlessEscrow = TrustlessEscrow;
 }
