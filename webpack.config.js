@@ -20,8 +20,6 @@ fs.readdirSync(contracts_directory).forEach(function(file) {
   }
 });
 
-console.log(provided);
-
 module.exports = {
   entry: './app/javascripts/app.js',
   output: {

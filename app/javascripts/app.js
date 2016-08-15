@@ -1,6 +1,8 @@
 require("../stylesheets/app.css");
-
+import React, { Component, PropTypes } from 'react';
 var Web3 = require("web3");
+import App from '../components/App/App.js';
+var ReactDOM = require('react-dom');
 
 var accounts;
 var account;
@@ -67,6 +69,9 @@ window.onload = function() {
     accounts = accs;
     account = accounts[0];
 
-    // refreshBalance();
+    ReactDOM.render(
+      <App />,
+      document.getElementById('content')
+    );
   });
 }
