@@ -1,6 +1,22 @@
+require("../stylesheets/app.css");
+
+var Web3 = require("web3");
+
 var accounts;
 var account;
 var balance;
+var web3;
+
+// web3 setup
+if (typeof web3 !== 'undefined') {
+  web3 = new Web3(web3.currentProvider);
+} else {
+  // set the provider you want from Web3.providers
+  web3 = new Web3(new Web3.providers.HttpProvider(WEB3_PROVIDER_LOCATION));
+}
+
+TrustlessEscrow.setProvider(web3.currentProvider);
+MetaCoin.setProvider(web3.currentProvider);
 
 function setStatus(message) {
   var status = document.getElementById("status");
