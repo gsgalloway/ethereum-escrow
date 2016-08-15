@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
+import { createContract } from '../../actions/actions.js';
+import { connect } from 'react-redux'
 
-var App = (props) => {
+var App = ({dispatch}) => {
   var buyer,
       seller,
       price;
@@ -17,11 +19,7 @@ var App = (props) => {
           // dispatch(addTodo(input.value))
           // input.value = ''
           var txOptions = {from: buyer.value}
-          TrustlessEscrow.deployed().createContract(buyer.value, seller.value, price.value, txOptions).then(function(ret) {
-            console.log(ret);
-          }, function(e) {
-            console.err(e);
-          });
+          dispatch(createContract(buyer.value, seller.value, price.value, txOptions));
         }}>
 
           Buyer Address <input type="text" ref={ref => buyer = ref} />
@@ -33,5 +31,7 @@ var App = (props) => {
       </div>
     );
 }
+
+App = connect()(App);
 
 export default App;

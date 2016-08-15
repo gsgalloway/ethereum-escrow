@@ -3,6 +3,10 @@ import React, { Component, PropTypes } from 'react';
 var Web3 = require("web3");
 import App from '../components/App/App.jsx';
 var ReactDOM = require('react-dom');
+import thunkMiddleware from 'redux-thunk'
+import createLogger from 'redux-logger'
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
 
 var accounts;
 var account;
@@ -20,10 +24,16 @@ if (typeof web3 !== 'undefined') {
 TrustlessEscrow.setProvider(web3.currentProvider);
 MetaCoin.setProvider(web3.currentProvider);
 
-function setStatus(message) {
-  var status = document.getElementById("status");
-  status.innerHTML = message;
-};
+const loggerMiddleware = createLogger();
+
+const store = createStore(
+  () => 'TODO: add reducers',
+  applyMiddleware(
+    thunkMiddleware, // lets us dispatch() functions
+    loggerMiddleware // neat middleware that logs actions
+  )
+);
+
 
 function refreshBalance() {
   var meta = MetaCoin.deployed();
@@ -70,10 +80,13 @@ window.onload = function() {
     account = accounts[0];
 
     ReactDOM.render(
-      <App />,
+      <Provider store={store}>
+        <App />
+      </Provider>,
       document.getElementById('content')
     );
   });
   window.web3 = web3;
   window.TrustlessEscrow = TrustlessEscrow;
+
 }
