@@ -21,7 +21,7 @@ fs.readdirSync(contracts_directory).forEach(function(file) {
 });
 
 module.exports = {
-  entry: './app/javascripts/app.jsx',
+  entry: './src/javascript/index.jsx',
   output: {
     path: "./build",
     filename: 'app.js'
@@ -41,8 +41,8 @@ module.exports = {
     }),
     new webpack.ProvidePlugin(provided),
     new CopyWebpackPlugin([
-      { from: './app/index.html', to: "index.html" },
-      { from: './app/images', to: "images" },
+      { from: './src/index.html', to: "index.html" },
+      { from: './src/images', to: "images" },
     ]),
     new ExtractTextPlugin("app.css")
   ],

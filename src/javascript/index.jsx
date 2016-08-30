@@ -1,7 +1,7 @@
 require("../stylesheets/app.css");
 import React, { Component, PropTypes } from 'react';
 var Web3 = require("web3");
-import App from '../components/App/App.jsx';
+import App from './components/App/App.jsx';
 var ReactDOM = require('react-dom');
 import thunkMiddleware from 'redux-thunk'
 import createLogger from 'redux-logger'
