@@ -26,6 +26,7 @@ module.exports = {
     path: "./build",
     filename: 'app.js'
   },
+  devtool: 'source-map',
   module: {
     loaders: [
       { test: /\.(js|jsx|es6)$/, exclude: /node_modules/, loader: "babel-loader"},
@@ -46,6 +47,12 @@ module.exports = {
     ]),
     new ExtractTextPlugin("app.css")
   ],
-  resolve: { fallback: path.join(__dirname, "node_modules") },
-  resolveLoader: { fallback: path.join(__dirname, "node_modules") }
+  resolve: {
+    fallback: path.join(__dirname, "node_modules"),
+    extensions: ["", ".js", ".jsx"]
+  },
+  resolveLoader: {
+    fallback: path.join(__dirname, "node_modules"),
+    extensions: ["", ".js", ".jsx"]
+  }
 };
