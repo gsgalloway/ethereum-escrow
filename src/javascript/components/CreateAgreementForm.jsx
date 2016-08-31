@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 
 export default class CreateAgreementForm extends Component {
   render() {
-    const { onSubmit } = this.props
+    const { onSubmit, error } = this.props
 
     var buyer,
         seller,
@@ -26,6 +26,8 @@ export default class CreateAgreementForm extends Component {
           Price <input type="text" ref={ref => price = ref} />
           <input type="submit" value="Create Agreement" />
 
+          {error}
+
         </form>
       </div>
     );
@@ -33,5 +35,6 @@ export default class CreateAgreementForm extends Component {
 }
 
 CreateAgreementForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  error: PropTypes.object
 }

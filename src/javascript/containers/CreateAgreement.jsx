@@ -1,16 +1,27 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux'
 import TrustlessEscrowContract from '../web3';
 import CreateAgreementForm from '../components/CreateAgreementForm';
-import { createContract } from '../actions/actions.js';
+import { createContract } from '../actions';
 
 
-var onSubmit = function(buyer, seller, value) {
-  // TODO: replace this with the current account
-  var txOptions = {from: buyer.value};
-};
-
-export default class CreateAgreement extends Component {
-  render() {
-    return <CreateAgreementForm onSubmit={onSubmit}/>;
+const mapStateToProps = (state) => {
+  return {
+    agreementPending: state.createAgreement.agreementPending,
+    error: state.createAgreement.error
   }
 };
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    // TODO: replace this with the current account
+    onSubmit: (buyer, seller, value, txOptions = {from: buyer}) => {
+      dispatch(createContract(buyer, seller, value, txOptions))
+    }
+  }
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateAgreementForm);
