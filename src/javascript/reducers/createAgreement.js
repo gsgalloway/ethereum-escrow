@@ -6,8 +6,8 @@ import {
 
 
 const INITIAL_STATE = {
-  pending: false,
-  error: {},
+  agreementPending: false,
+  error: '',
 }
 
 export default function createAgreementReducer(state = INITIAL_STATE, action) {
@@ -15,15 +15,20 @@ export default function createAgreementReducer(state = INITIAL_STATE, action) {
     case CREATE_CONTRACT_PENDING:
       return {
         ...state,
-        pending: true,
-        error: {}
+        agreementPending: true,
+        error: ''
       };
-    case CREATE_CONTRACT_FAILED:
-      console.log(action.error);
+    case CREATE_CONTRACT_FULFILLED:
       return {
         ...state,
-        pending: false,
-        error: action.error
+        agreementPending: false,
+        error: ''
+      };
+    case CREATE_CONTRACT_FAILED:
+      return {
+        ...state,
+        agreementPending: false,
+        error: action.error.message
       };
     default:
       return state;

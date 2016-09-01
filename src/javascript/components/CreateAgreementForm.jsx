@@ -26,7 +26,7 @@ export default class CreateAgreementForm extends Component {
           Price <input type="text" ref={ref => price = ref} />
           <input type="submit" value="Create Agreement" />
 
-          {error}
+          <p>{error}</p>
 
         </form>
       </div>
@@ -36,5 +36,5 @@ export default class CreateAgreementForm extends Component {
 
 CreateAgreementForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  error: PropTypes.object
+  error: PropTypes.string
 }
