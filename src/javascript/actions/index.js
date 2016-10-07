@@ -1,4 +1,4 @@
-// TODO: import TrustedEscrow
+import TrustlessEscrow from '../web3';
 
 export const CREATE_CONTRACT_PENDING = 'CREATE_CONTRACT_PENDING';
 export const CREATE_CONTRACT_FULFILLED = 'CREATE_CONTRACT_FULFILLED';
@@ -21,7 +21,7 @@ export function createContractFailed(error){
   return {
     type: CREATE_CONTRACT_FAILED,
     error
-  }
+  };
 }
 
 

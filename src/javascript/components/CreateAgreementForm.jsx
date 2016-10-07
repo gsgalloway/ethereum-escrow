@@ -36,5 +36,5 @@ export default class CreateAgreementForm extends Component {
 
 CreateAgreementForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  error: PropTypes.string
+  error: PropTypes.string,
 }
