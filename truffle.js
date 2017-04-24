@@ -9,17 +9,16 @@ module.exports = {
   //   ],
   //   "images/": "images/"
   // },
-  build: "webpack",
+  build: "npm run build",
   networks: {
     "development": {
       network_id: "default",
       host: "localhost",
-      port: 9000
+      port: 8545
     }
   },
   rpc: {
     host: "localhost",
-    //port: 8545
-    port: 9000
+    port: 8545
   }
 };

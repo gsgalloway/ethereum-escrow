@@ -26,7 +26,7 @@ React & Redux power the front-end of the web app. Redux communicates with the EV
 ## Running/Developing Locally
 
 You'll need NodeJS, Truffle (a development framework for easily building webapps that interact with
-Ethereum contracts), and a running Ethereum node.
+Ethereum contracts) version 3, and a running Ethereum node.
 
 An Ethereum node is a process that manages connections to the Ethereum peer-to-peer network and runs all Transactions submitted to the blockchain to build an in-memory representation of the state of the EVM (this is used by the dapp to query the EVM's state). Ethereum nodes also facilitate broadcasting new transactions to the network and to the miners that can add those transactions to the blockchain (this is used by the dapp to make changes to the EVM's state).
 
@@ -37,15 +37,21 @@ Several options exist for Ethereum nodes.
 - [MetaMask](https://metamask.io) is a browser extension that facilitates connections between your javascript and existing ethereum nodes.
 - EthereumJS TestRPC is a very lightweight tool that creates a private, local test network for you where you are the sole miner. This is by far the best tool to use for local development and local tests. It does not include a web browser, but any regular browser will be able to connect to it via the `web3` library.
 
-Here's some setup instructions for use with EthereumJS TestRPC:
+Here's some setup instructions for use with EthereumJS TestRPC and MetaMask in Chrome:
 
 - Install NodeJS
-- Install & run EthereumJS TestRPC: https://github.com/ethereumjs/testrpc
-- Install Truffle: https://truffle.readthedocs.io/en/latest/getting_started/installation/
+- Install & run EthereumJS TestRPC v3: https://github.com/ethereumjs/testrpc
+  - `npm install -g ethereumjs-testrpc@">=3.0.0 <4.0.0"`
+  - `testrpc` (in a separate window)
+- Install Truffle v3: https://truffle.readthedocs.io/en/latest/getting_started/installation/
+  - `npm install -g truffle@">=3.2.0 <4.0.0"`
 - Compile and deploy the TrustlessEscrow smart contract to your EthereumJS TestRPC blockchain:
   - `truffle compile`
   - `truffle migrate`
 - Build the frontend: `truffle build`
 - Run Truffle's builtin webserver on http://localhost:8080
-  - `truffle serve`
-- Navigate to http://localhost:8080 in any web browser.
+  - `truffle serve` (or `npm run dev` for live-reload)
+- Install the MetaMask Chrome extension
+  - https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn/related?authuser=2
+  - Create a password, then switch networks to the `localhost:8545` option
+- Navigate to http://localhost:8080 in a web3 compatible browser (Ex: Mist or MetaMask)

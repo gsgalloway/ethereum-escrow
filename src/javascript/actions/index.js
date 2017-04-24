@@ -43,8 +43,8 @@ export function createContract(buyer, seller, price, txOptions) {
 
     // In this case, we return a promise to wait for.
     // This is not required by thunk middleware, but it is convenient for us.
-
-    return TrustlessEscrow.deployed().createContract(buyer, seller, price, txOptions)
+    return TrustlessEscrow.deployed()
+      .then(escrowContract => escrowContract.createContract(buyer, seller, price, txOptions))
       .then(txHash => dispatch(createContractFulfilled(txHash)))
       .catch(e => dispatch(createContractFailed(e)));
   }

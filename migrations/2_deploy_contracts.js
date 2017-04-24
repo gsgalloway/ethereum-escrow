@@ -1,5 +1,5 @@
+var TrustlessEscrow = artifacts.require("./TrustlessEscrow.sol");
+
 module.exports = function(deployer) {
-  deployer.deploy(ConvertLib);
-  deployer.autolink();
   deployer.deploy(TrustlessEscrow);
 };

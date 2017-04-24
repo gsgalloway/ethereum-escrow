@@ -1,4 +1,7 @@
 import Web3 from "web3";
+import { default as contract } from 'truffle-contract'
+import trustless_escrow_artifacts from '../../../build/contracts/TrustlessEscrow.json'
+
 
 var _web3Instance;
 
@@ -12,7 +15,7 @@ if (typeof web3 !== 'undefined') {
 
 _web3Instance.eth.getAccounts(function(err, accs) {
   if (err != null) {
-    alert("There was an error fetching your accounts.");
+    alert("There was an error fetching your accounts. Are you using a web3 compatible browser?");
     return;
   }
 
@@ -21,6 +24,8 @@ _web3Instance.eth.getAccounts(function(err, accs) {
     return;
   }
 });
+
+var TrustlessEscrow = contract(trustless_escrow_artifacts);
 
 TrustlessEscrow.setProvider(_web3Instance.currentProvider);
 
