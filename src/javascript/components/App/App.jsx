@@ -1,3 +1,6 @@
+// NOTE: I'm pretty sure this file is unused, and is a duplicate
+// of src/index.jsx
+
 import React, { Component, PropTypes } from 'react';
 import { createAgreement } from '../../actions/actions.js';
 import { connect } from 'react-redux'
