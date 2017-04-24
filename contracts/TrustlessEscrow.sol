@@ -1,9 +1,9 @@
 pragma solidity ^0.4.0;
 
-contract Mortal {
+contract SelfDestructable {
     address creator;
 
-    function Mortal() {
+    function SelfDestructable() {
         creator = msg.sender;
     }
 
@@ -14,57 +14,57 @@ contract Mortal {
     }
 }
 
-contract TrustlessEscrow is Mortal {
+contract TrustlessEscrow is SelfDestructable {
     uint public value;
     address public seller;
     address public buyer;
-    bool public buyerConfirmedContract;
-    bool public sellerConfirmedContract;
+    bool public buyerConfirmedAgreement;
+    bool public sellerConfirmedAgreement;
 
     function TrustlessEscrow(){}
 
-    function createContract(address _buyer, address _seller, uint _value) {
+    function createAgreement(address _buyer, address _seller, uint _value) {
         seller = _seller;
         buyer = _buyer;
         value = _value;
-        buyerConfirmedContract = false;
-        sellerConfirmedContract = false;
+        buyerConfirmedAgreement = false;
+        sellerConfirmedAgreement = false;
     }
 
-    function buyerConfirmsContract() payable
+    function buyerConfirmsAgreement() payable
         onlyBuyer
         require(msg.value == 2*value)
     {
-        buyerConfirmedContract = true;
+        buyerConfirmedAgreement = true;
     }
 
-    function sellerConfirmsContract() payable
+    function sellerConfirmsAgreement() payable
         onlySeller
         require(msg.value == value)
     {
-        sellerConfirmedContract = true;
+        sellerConfirmedAgreement = true;
     }
 
-    /*function abortContract() {
+    /*function abortAgreement() {
         if (msg.sender == seller) {
-            if (buyerConfirmedContract) {
-                buyerConfirmedContract = false;
+            if (buyerConfirmedAgreement) {
+                buyerConfirmedAgreement = false;
                 if (!buyer.send(value*2)){
 
                 }
             }
-            if (sellerConfirmedContract) {
+            if (sellerConfirmedAgreement) {
                 seller.send(value);
-                sellerConfirmedContract = false;
+                sellerConfirmedAgreement = false;
             }
         } else if (msg.sender == buyer) {
-            if (sellerConfirmedContract && buyerConfirmedContract) {
+            if (sellerConfirmedAgreement && buyerConfirmedAgreement) {
                 throw;
             }
-            else if (buyerConfirmedContract) {
+            else if (buyerConfirmedAgreement) {
                 buyer.send(value*2);
             }
-            else if (sellerConfirmedContract) {
+            else if (sellerConfirmedAgreement) {
                 seller.send(value);
             }
         }
@@ -72,10 +72,10 @@ contract TrustlessEscrow is Mortal {
 
     function confirmReceived()
         onlyBuyer
-        require(buyerConfirmedContract && sellerConfirmedContract)
+        require(buyerConfirmedAgreement && sellerConfirmedAgreement)
     {
-        buyerConfirmedContract = false;
-        sellerConfirmedContract = false;
+        buyerConfirmedAgreement = false;
+        sellerConfirmedAgreement = false;
         var unused = buyer.send(value);
         unused = seller.send(value*2);
     }

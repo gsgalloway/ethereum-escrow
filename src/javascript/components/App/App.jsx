@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { createContract } from '../../actions/actions.js';
+import { createAgreement } from '../../actions/actions.js';
 import { connect } from 'react-redux'
 
 var App = ({dispatch}) => {
@@ -19,7 +19,7 @@ var App = ({dispatch}) => {
           // dispatch(addTodo(input.value))
           // input.value = ''
           var txOptions = {from: buyer.value}
-          dispatch(createContract(buyer.value, seller.value, price.value, txOptions));
+          dispatch(createAgreement(buyer.value, seller.value, price.value, txOptions));
         }}>
 
           Buyer Address <input type="text" ref={ref => buyer = ref} />

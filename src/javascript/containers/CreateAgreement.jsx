@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux'
 import TrustlessEscrowContract from '../web3';
 import CreateAgreementForm from '../components/CreateAgreementForm';
-import { createContract } from '../actions';
+import { createAgreement } from '../actions';
 
 
 const mapStateToProps = (state) => {
@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     // TODO: replace this with the current account
     onSubmit: (buyer, seller, value, txOptions = {from: buyer}) => {
-      dispatch(createContract(buyer, seller, value, txOptions))
+      dispatch(createAgreement(buyer, seller, value, txOptions))
     }
   }
 };

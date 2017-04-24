@@ -1,31 +1,31 @@
 import TrustlessEscrow from '../web3';
 
-export const CREATE_CONTRACT_PENDING = 'CREATE_CONTRACT_PENDING';
-export const CREATE_CONTRACT_FULFILLED = 'CREATE_CONTRACT_FULFILLED';
-export const CREATE_CONTRACT_FAILED = 'CREATE_CONTRACT_FAILED';
+export const CREATE_AGREEMENT_PENDING = 'CREATE_AGREEMENT_PENDING';
+export const CREATE_AGREEMENT_FULFILLED = 'CREATE_AGREEMENT_FULFILLED';
+export const CREATE_AGREEMENT_FAILED = 'CREATE_AGREEMENT_FAILED';
 
-export function createContractPending() {
+export function createAgreementPending() {
   return {
-    type: CREATE_CONTRACT_PENDING
+    type: CREATE_AGREEMENT_PENDING
   };
 }
 
-export function createContractFulfilled(transactionHash) {
+export function createAgreementFulfilled(transactionHash) {
   return {
-    type: CREATE_CONTRACT_FULFILLED,
+    type: CREATE_AGREEMENT_FULFILLED,
     transactionHash
   };
 }
 
-export function createContractFailed(error){
+export function createAgreementFailed(error){
   return {
-    type: CREATE_CONTRACT_FAILED,
+    type: CREATE_AGREEMENT_FAILED,
     error
   };
 }
 
 
-export function createContract(buyer, seller, price, txOptions) {
+export function createAgreement(buyer, seller, price, txOptions) {
 
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
@@ -36,7 +36,7 @@ export function createContract(buyer, seller, price, txOptions) {
     // First dispatch: the app state is updated to inform
     // that the API call is starting.
 
-    dispatch(createContractPending());
+    dispatch(createAgreementPending());
 
     // The function called by the thunk middleware can return a value,
     // that is passed on as the return value of the dispatch method.
@@ -44,8 +44,8 @@ export function createContract(buyer, seller, price, txOptions) {
     // In this case, we return a promise to wait for.
     // This is not required by thunk middleware, but it is convenient for us.
     return TrustlessEscrow.deployed()
-      .then(escrowContract => escrowContract.createContract(buyer, seller, price, txOptions))
-      .then(txHash => dispatch(createContractFulfilled(txHash)))
-      .catch(e => dispatch(createContractFailed(e)));
+      .then(escrowContract => escrowContract.createAgreement(buyer, seller, price, txOptions))
+      .then(txHash => dispatch(createAgreementFulfilled(txHash)))
+      .catch(e => dispatch(createAgreementFailed(e)));
   }
 }
