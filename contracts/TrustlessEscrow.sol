@@ -1,3 +1,5 @@
+pragma solidity ^0.4.0;
+
 contract Mortal {
     address creator;
 
@@ -29,14 +31,14 @@ contract TrustlessEscrow is Mortal {
         sellerConfirmedContract = false;
     }
 
-    function buyerConfirmsContract()
+    function buyerConfirmsContract() payable
         onlyBuyer
         require(msg.value == 2*value)
     {
         buyerConfirmedContract = true;
     }
 
-    function sellerConfirmsContract()
+    function sellerConfirmsContract() payable
         onlySeller
         require(msg.value == value)
     {
@@ -83,16 +85,16 @@ contract TrustlessEscrow is Mortal {
     modifier onlyBuyer()
     {
         if (msg.sender != buyer) throw;
-        _
+        _;
     }
     modifier onlySeller()
     {
         if (msg.sender != seller) throw;
-        _
+        _;
     }
     modifier require(bool _condition)
     {
         if (!_condition) throw;
-        _
+        _;
     }
 }
