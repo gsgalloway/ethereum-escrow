@@ -1,8 +1,9 @@
 import TrustlessEscrow from '../web3';
-
-export const CREATE_AGREEMENT_PENDING = 'CREATE_AGREEMENT_PENDING';
-export const CREATE_AGREEMENT_FULFILLED = 'CREATE_AGREEMENT_FULFILLED';
-export const CREATE_AGREEMENT_FAILED = 'CREATE_AGREEMENT_FAILED';
+import {
+    CREATE_CONTRACT_PENDING,
+    CREATE_CONTRACT_FULFILLED,
+    CREATE_CONTRACT_FAILED
+  } from '../constants';
 
 export function createAgreementPending() {
   return {

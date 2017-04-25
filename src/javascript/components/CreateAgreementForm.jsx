@@ -1,40 +1,39 @@
-import React, { Component, PropTypes } from 'react'
+// @flow
+import React from 'react';
 
-export default class CreateAgreementForm extends Component {
-  render() {
-    const { onSubmit, error } = this.props
+const CreateAgreementForm = (props: {onSubmit: Function, error: string}) => {
+  // need to add isRequired
+  // onSubmit: ?Function
+  // once type refinement is created
+  const { onSubmit, error } = props;
 
-    var buyer,
-        seller,
-        price;
+  let buyer,
+      seller,
+      price;
 
-    return (
-      <div>
-        <h1>Trustless Escrow</h1>
+  return (
+    <div>
+      <h1>Trustless Escrow</h1>
 
-        <form onSubmit={e => {
-          e.preventDefault()
-          if (!buyer.value.trim() || !seller.value.trim()) {
-            return
-          }
+      <form onSubmit={e => {
+        e.preventDefault();
+        if (!buyer.value.trim() || !seller.value.trim()) {
+          return;
+        };
 
-          onSubmit(buyer.value, seller.value, price.value)
-        }}>
+        onSubmit(buyer.value, seller.value, price.value);
+      }}>
 
-          Buyer Address <input type="text" ref={ref => buyer = ref} />
-          Seller Address <input type="text" ref={ref => seller = ref} />
-          Price <input type="text" ref={ref => price = ref} />
-          <input type="submit" value="Create Agreement" />
+        Buyer Address <input type="text" ref={ref => buyer = ref} />
+        Seller Address <input type="text" ref={ref => seller = ref} />
+        Price <input type="text" ref={ref => price = ref} />
+        <input type="submit" value="Create Agreement" />
 
-          <p>{error}</p>
+        <p>{error}</p>
 
-        </form>
-      </div>
-    );
-  }
+      </form>
+    </div>
+  );
 }
 
-CreateAgreementForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  error: PropTypes.string,
-}
+export default CreateAgreementForm;

@@ -2,7 +2,7 @@ import {
     CREATE_CONTRACT_PENDING,
     CREATE_CONTRACT_FULFILLED,
     CREATE_CONTRACT_FAILED
-  } from '../actions';
+  } from '../constants';
 
 
 const INITIAL_STATE = {
