@@ -2,9 +2,6 @@
 import React from 'react';
 
 const CreateAgreementForm = (props: {onSubmit: Function, error: string}) => {
-  // need to add isRequired
-  // onSubmit: ?Function
-  // once type refinement is created
   const { onSubmit, error } = props;
 
   let buyer,
