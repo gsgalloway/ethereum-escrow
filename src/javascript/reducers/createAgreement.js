@@ -1,7 +1,7 @@
 import {
-    CREATE_CONTRACT_PENDING,
-    CREATE_CONTRACT_FULFILLED,
-    CREATE_CONTRACT_FAILED
+    CREATE_AGREEMENT_PENDING,
+    CREATE_AGREEMENT_FULFILLED,
+    CREATE_AGREEMENT_FAILED
   } from '../actions';
 
 
@@ -12,19 +12,19 @@ const INITIAL_STATE = {
 
 export default function createAgreementReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case CREATE_CONTRACT_PENDING:
+    case CREATE_AGREEMENT_PENDING:
       return {
         ...state,
         agreementPending: true,
         error: ''
       };
-    case CREATE_CONTRACT_FULFILLED:
+    case CREATE_AGREEMENT_FULFILLED:
       return {
         ...state,
         agreementPending: false,
         error: ''
       };
-    case CREATE_CONTRACT_FAILED:
+    case CREATE_AGREEMENT_FAILED:
       return {
         ...state,
         agreementPending: false,
