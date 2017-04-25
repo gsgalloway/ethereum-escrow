@@ -1,4 +1,3 @@
-require("../stylesheets/app.css");
 // import App from './components/App/App.jsx';
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
@@ -6,6 +5,7 @@ import { Provider } from 'react-redux'
 import { Router, browserHistory } from 'react-router';
 import { store } from './redux/store';
 import getRoutes from './routes.jsx';
+import '../stylesheets/app.css';
 
 import { IndexRoute, Route } from 'react-router';
 

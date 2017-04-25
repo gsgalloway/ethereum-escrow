@@ -9,7 +9,8 @@
     "hot-dev-server": "webpack-dev-server --config webpack-hot-dev-server.config.js --hot --progress --colors --port 2992 --inline",
     "build": "webpack",
     "start-dev": "node lib/server-development",
-    "start": "node lib/server-production"
+    "start": "node lib/server-production",
+    "flow": "flow"
   },
   "keywords": [
     "webpack",
@@ -53,6 +54,7 @@
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
     "sass-loader": "^4.0.0",
+    "semantic-ui-react": "^0.68.2",
     "stats-webpack-plugin": "^0.4.2",
     "style-loader": "^0.13.1",
     "superagent": "^2.2.0",
@@ -64,8 +66,13 @@
     "webpack-dev-server": "^1.4.7"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
     "babel-eslint": "^6.1.2",
+    "babel-plugin-transform-flow-comments": "^6.22.0",
+    "babel-preset-flow": "^6.23.0",
     "eslint": "^3.3.0",
-    "eslint-plugin-react": "^6.1.0"
+    "eslint-plugin-react": "^6.1.0",
+    "flow-babel-webpack-plugin": "^1.0.1",
+    "flow-bin": "^0.44.2"
   }
 }
