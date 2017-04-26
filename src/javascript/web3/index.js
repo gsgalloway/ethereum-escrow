@@ -10,7 +10,7 @@ if (typeof web3 !== 'undefined') {
   _web3Instance = new Web3(web3.currentProvider);
 } else {
   // set the provider you want from Web3.providers
-  _web3Instance = new Web3(new Web3.providers.HttpProvider(WEB3_PROVIDER_LOCATION));
+  _web3Instance = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 }
 
 _web3Instance.eth.getAccounts(function(err, accs) {
