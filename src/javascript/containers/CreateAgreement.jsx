@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import TrustlessEscrowContract from '../web3';
 import CreateAgreementForm from '../components/CreateAgreementForm';
 import { createAgreement } from '../actions';

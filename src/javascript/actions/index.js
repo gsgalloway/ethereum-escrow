@@ -14,14 +14,14 @@ export function createAgreementPending() {
 export function createAgreementFulfilled(transactionHash) {
   return {
     type: CREATE_AGREEMENT_FULFILLED,
-    transactionHash
+    payload: transactionHash
   };
 }
 
 export function createAgreementFailed(error){
   return {
     type: CREATE_AGREEMENT_FAILED,
-    error
+    payload: error
   };
 }
 

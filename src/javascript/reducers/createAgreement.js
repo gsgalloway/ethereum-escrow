@@ -28,7 +28,7 @@ export default function createAgreementReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         agreementPending: false,
-        error: action.error.message
+        error: action.payload.error.message
       };
     default:
       return state;
