@@ -1,36 +1,77 @@
-// @flow
-import React from 'react';
+import React, { Component } from 'react';
 
-const CreateAgreementForm = (props: {onSubmit: Function, error: string}) => {
-  const { onSubmit, error } = props;
+export default class CreateAgreementForm extends Component {
+  props: {
+    onFormSubmit: void,
+    agreementPending: string,
+    error: string,
+  }
 
-  let buyer,
-      seller,
-      price;
+  state: {
+    buyer: string;
+    seller: string;
+    price: string;
+  }
 
-  return (
-    <div>
-      <h1>Trustless Escrow</h1>
+  constructor(props) {
+    super(props);
+    // going to start by giving input state to the component
+    // until the value is submitted, then giving the values to the
+    // global store
+    this.state = {
+      buyer: '',
+      seller: '',
+      price: '',
+    }
+    // flow error with binding class methods in constructor
+    // can be removed if we use ES7 stage 2 arrow functions to
+    // encapsulate scope
+    // there are other methods, but they reduce performance
+    const self: Object = this;
 
-      <form onSubmit={e => {
-        e.preventDefault();
-        if (!buyer.value.trim() || !seller.value.trim()) {
-          return;
-        };
+    self.handleChange = this.handleChange.bind(this);
+    self.handleSubmit = this.handleSubmit.bind(this);
+  };
 
-        onSubmit(buyer.value, seller.value, price.value);
-      }}>
+  handleChange(e: SyntheticInputEvent & { target: HTMLInputElement}) {
+    const { target } = e;
+    this.setState({ [target.name]: target.value });
+  }
 
-        Buyer Address <input type="text" ref={ref => buyer = ref} />
-        Seller Address <input type="text" ref={ref => seller = ref} />
-        Price <input type="text" ref={ref => price = ref} />
-        <input type="submit" value="Create Agreement" />
+  handleSubmit(e: SyntheticInputEvent) {
+    e.preventDefault();
+    const { buyer, seller, price } = this.state;
+    if (!buyer || !seller || !price) {
+      // TODO: Add error logic/ alert dropdown
+      return alert('Form not complete');
+    };
+    this.props.onFormSubmit(buyer.trim(), seller.trim(), price.trim());
+  }
 
-        <p>{error}</p>
-
-      </form>
+  render() {
+    return (
+      <div>
+        <h2>Trustless Escrow</h2>
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Buyer Address
+            <input type="text" name="buyer" value={this.state.buyer} onChange={this.handleChange} />
+          </label>
+           <br />
+          <label>
+            Seller Address
+            <input type="text" name="seller" value={this.state.seller} onChange={this.handleChange} />
+          </label>
+        <br />
+          <label>
+            Price
+            <input type="text" name="price" value={this.state.price} onChange={this.handleChange} />
+          </label>
+          <br />
+          <input type="submit" value="Create Agreement" />
+        </form>
+        <p>{this.props.error}</p>
     </div>
-  );
-}
-
-export default CreateAgreementForm;
+    );
+  }
+};
