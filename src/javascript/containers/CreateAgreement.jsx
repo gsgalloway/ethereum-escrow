@@ -1,9 +1,15 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import TrustlessEscrowContract from '../web3';
 import CreateAgreementForm from '../components/CreateAgreementForm';
 import { createAgreement } from '../actions';
 
+class CreateAgreement extends Component {
+  render() {
+    return <CreateAgreementForm {...this.props} />;
+  }
+}
 
 const mapStateToProps = (state) => {
   return {
@@ -15,7 +21,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     // TODO: replace this with the current account
-    onSubmit: (buyer, seller, value, txOptions = {from: buyer}) => {
+    onFormSubmit: (buyer, seller, value, txOptions = {from: buyer}) => {
       dispatch(createAgreement(buyer, seller, value, txOptions))
     }
   }
@@ -24,4 +30,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateAgreementForm);
+)(CreateAgreement);
