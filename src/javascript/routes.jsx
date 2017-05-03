@@ -1,3 +1,4 @@
+// @flow
 import React, { Component, PropTypes } from 'react';
 import { IndexRoute, Route } from 'react-router';
 import App from './containers/App';

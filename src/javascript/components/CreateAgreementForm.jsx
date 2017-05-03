@@ -1,19 +1,19 @@
+// @flow
 import React, { Component } from 'react';
 
-export default class CreateAgreementForm extends Component {
-  props: {
-    onFormSubmit: void,
-    agreementPending: string,
-    error: string,
-  }
+type Props = {
+  agreementPending: string,
+  error: string,
+}
 
+export default class CreateAgreementForm extends Component {
   state: {
     buyer: string;
     seller: string;
     price: string;
   }
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     // going to start by giving input state to the component
     // until the value is submitted, then giving the values to the

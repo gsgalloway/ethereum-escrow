@@ -1,3 +1,4 @@
+// @flow
 import TrustlessEscrow from '../web3';
 import {
     CREATE_AGREEMENT_PENDING,
@@ -5,28 +6,44 @@ import {
     CREATE_AGREEMENT_FAILED
   } from '../constants';
 
-export function createAgreementPending() {
+export type PendingAction = { type: 'CREATE_AGREEMENT_PENDING' };
+export type FulfilledAction = { type: 'CREATE_AGREEMENT_FULFILLED' };
+export type FailedAction = { type: 'CREATE_AGREEMENT_FAILED', payload: string };
+
+type Action =
+  | PendingAction
+  | FulfilledAction
+  | FailedAction;
+// taken from flow documentation
+// probably will slim this down once
+// I understand redux-thunk better
+type Dispatch = (action: Action | ThunkAction | PromiseAction) => any;
+type GetState = () => Object;
+type ThunkAction = (dispatch: Dispatch, getState: GetState) => any;
+type PromiseAction = Promise<Action>;
+
+export function createAgreementPending(): PendingAction {
   return {
-    type: CREATE_AGREEMENT_PENDING
+    type: 'CREATE_AGREEMENT_PENDING'
   };
 }
 
-export function createAgreementFulfilled(transactionHash) {
+export function createAgreementFulfilled(transactionHash: string): FulfilledAction {
   return {
-    type: CREATE_AGREEMENT_FULFILLED,
+    type: 'CREATE_AGREEMENT_FULFILLED',
     payload: transactionHash
   };
 }
 
-export function createAgreementFailed(error){
+export function createAgreementFailed(error: string): FailedAction{
   return {
-    type: CREATE_AGREEMENT_FAILED,
+    type: 'CREATE_AGREEMENT_FAILED',
     payload: error
   };
 }
 
-
-export function createAgreement(buyer, seller, price, txOptions) {
+// transaction options will be "any" for now
+export function createAgreement(buyer: string, seller: string, price: string, txOptions: any): ThunkAction {
 
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
