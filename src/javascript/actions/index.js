@@ -1,15 +1,11 @@
 // @flow
 import TrustlessEscrow from '../web3';
-import {
-    CREATE_AGREEMENT_PENDING,
-    CREATE_AGREEMENT_FULFILLED,
-    CREATE_AGREEMENT_FAILED
-  } from '../constants';
 
 export type PendingAction = { type: 'CREATE_AGREEMENT_PENDING' };
 export type FulfilledAction = { type: 'CREATE_AGREEMENT_FULFILLED' };
 export type FailedAction = { type: 'CREATE_AGREEMENT_FAILED', payload: string };
 
+// this is included in the documentation, but not referenced anywhere
 type Action =
   | PendingAction
   | FulfilledAction

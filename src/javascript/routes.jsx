@@ -4,7 +4,7 @@ import { IndexRoute, Route } from 'react-router';
 import App from './containers/App';
 import CreateAgreement from './containers/CreateAgreement';
 import Home from './containers/Home';
-import ViewAgreement from './containers/ViewAgreement';
+import AgreementList from './containers/AgreementList';
 
 
 export default function getRoutes() {
@@ -12,7 +12,7 @@ export default function getRoutes() {
     <Route path="/" component={App}>
       <IndexRoute component={Home}/>
       <Route path="createAgreement" component={CreateAgreement}/>
-      <Route path="viewAgreement" component={ViewAgreement}/>
+      <Route path="agreementList" component={AgreementList}/>
     </Route>
   );
 };

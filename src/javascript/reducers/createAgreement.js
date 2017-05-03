@@ -1,14 +1,10 @@
 // @flow
-import {
-    CREATE_AGREEMENT_PENDING,
-    CREATE_AGREEMENT_FULFILLED,
-    CREATE_AGREEMENT_FAILED
-  } from '../constants';
 import type {
   PendingAction,
   FulfilledAction,
   FailedAction
 } from '../actions/index';
+
 type State = {
   +agreementPending: bool,
   +error: ?string,
@@ -45,6 +41,7 @@ export default function createAgreementReducer(state: State = INITIAL_STATE, act
 
       };
     default:
+      (actions: empty);
       return state;
   }
 };
