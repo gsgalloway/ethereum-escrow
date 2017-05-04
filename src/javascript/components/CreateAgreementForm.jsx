@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 type Props = {
   agreementPending: string,
   error: string,
+  onFormSubmit: (buyer: string, seller: string, price: string) => void,
 }
 
 export default class CreateAgreementForm extends Component {
@@ -12,6 +13,8 @@ export default class CreateAgreementForm extends Component {
     seller: string;
     price: string;
   }
+
+  props: Props
 
   constructor(props: Props) {
     super(props);
@@ -23,6 +26,7 @@ export default class CreateAgreementForm extends Component {
       seller: '',
       price: '',
     }
+    this.props = props;
     // flow error with binding class methods in constructor
     // can be removed if we use ES7 stage 2 arrow functions to
     // encapsulate scope
@@ -45,6 +49,7 @@ export default class CreateAgreementForm extends Component {
       // TODO: Add error logic/ alert dropdown
       return alert('Form not complete');
     };
+
     this.props.onFormSubmit(buyer.trim(), seller.trim(), price.trim());
   }
 
