@@ -19,7 +19,6 @@ export type AgreementListState = {
       requestPending: bool,
     },
   },
-  allTransactions: Array<string>,
 };
 // Agreement List
 export type AgreementsType = {

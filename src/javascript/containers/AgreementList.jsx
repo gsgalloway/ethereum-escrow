@@ -21,10 +21,8 @@ class AgreementList extends Component {
   };
 
   const mapStateToProps = (state) => {
-    const allTransactions: Array<string> = state.agreementList.allTransactions;
     const agreements: AgreementsType = state.agreementList.agreements;
     return {
-      allTransactions,
       agreements
     };
   };
