@@ -45,7 +45,6 @@ const INITIAL_STATE: AgreementListType = {
       requestPending: false,
     },
   },
-  allTransactions: ["asdfasdfas"],
 };
 export default function agreementListReducer(state: AgreementListType = INITIAL_STATE, action: Action): AgreementListType {
   const transaction: AgreementType = state[action.payload];
@@ -135,7 +134,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
         }
       }
     default:
-      (actions: empty);
+      (action: empty);
       return state;
   }
 }

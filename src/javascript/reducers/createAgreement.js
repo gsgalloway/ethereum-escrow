@@ -41,7 +41,7 @@ export default function createAgreementReducer(state: State = INITIAL_STATE, act
 
       };
     default:
-      (actions: empty);
+      (action: empty);
       return state;
   }
 };
