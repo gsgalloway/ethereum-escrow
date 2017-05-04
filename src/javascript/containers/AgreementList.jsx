@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router'
-import { sendMoney, confirmTransaction, cancelTransaction } from '../actions/agreementList';
+import { sendMoney, confirmTransaction, cancelTransaction, AgreementListDispatch } from '../actions/agreementList';
 import Agreement from '../components/agreement';
 import type { AgreementsType } from '../types';
 
@@ -20,22 +20,25 @@ class AgreementList extends Component {
     }
   };
 
-  const mapStateToProps = (state) => {
+  // TODO: replace these two "any"s with legit types
+  const mapStateToProps = (state: any): any => {
     const agreements: AgreementsType = state.agreementList.agreements;
     return {
       agreements
     };
   };
 
-  const mapDispatchToProps = (dispatch) => {
+  // TODO: change the "any" return type here to something more specific
+  // once we know what it looks like
+  const mapDispatchToProps = (dispatch: AgreementListDispatch): any => {
     return {
-      sendMoney: (transactionHash, position) => {
+      sendMoney: (transactionHash: string, position: string): void => {
         dispatch(sendMoney(transactionHash, position));
       },
-      confirmTransaction: (transactionHash) => {
+      confirmTransaction: (transactionHash: string): void => {
         dispatch(confirmTransaction(transactionHash));
       },
-      cancelTransaction: (transactionHash) => {
+      cancelTransaction: (transactionHash: string): void => {
         dispatch(cancelTransaction(transactionHash));
       }
     }
