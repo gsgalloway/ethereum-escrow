@@ -54,7 +54,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
     case 'REQUEST_PENDING':
       return {
         ...state,
-        transaction: {
+        [transaction]: {
           ...transaction,
           requestPending: true,
         }
@@ -63,7 +63,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
     case 'BUYER_SENT':
       return {
         ...state,
-        transaction: {
+        [transaction]: {
           ...transaction,
           buyerPaid: true,
           buyerPaidDate: Date.now(),
@@ -74,7 +74,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
     case 'SELLER_SENT':
       return {
         ...state,
-        transaction: {
+        [transaction]: {
           ...transaction,
           senderPaid: true,
           senderPaidDate: Date.now(),
@@ -85,7 +85,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
     case 'SEND_FAILED':
       return {
         ...state,
-        transaction: {
+        [transaction]: {
           ...transaction,
           error: "Sending your ether failed.",
           requestPending: false,
@@ -95,7 +95,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
     case 'CONFIRMED':
       return {
         ...state,
-        transaction: {
+        [transaction]: {
           ...transaction,
           transationComplete: true,
           transationCompleteDate: Date.now(),
@@ -106,7 +106,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
     case 'CONFIRM_FAILED':
       return {
         ...state,
-        transaction: {
+        [transaction]: {
           ...transaction,
           error: "Confirmation failed. Are you connected to the internet?",
           requestPending: false,
@@ -116,7 +116,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
     case 'TRANSACTION_CANCELED':
       return {
         ...state,
-        transaction: {
+        [transaction]: {
           ...transaction,
           canceled: true,
           canceledDate: Date.now(),
@@ -127,7 +127,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
     case 'TRANSACTION_CANCEL_FAILED':
       return {
         ...state,
-        transaction: {
+        [transaction]: {
           ...transaction,
           error: "Cancellation failed",
           requestPending: false,
