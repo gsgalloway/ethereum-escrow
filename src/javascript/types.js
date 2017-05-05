@@ -1,44 +1,22 @@
+// global state
+export type reduxStoreType = {
+  agreementList: {
+    agreements: AgreementListState,
+
+  }
+  createAgreement: {
+    agreementPending: bool,
+    error: string,
+  }
+}
+
 // state object for agreementList reducer
 export type AgreementListState = {
-  agreements:{
-    [transactionHash:string]:{
-      creationDate: number,
-      position: string,
-      price: number,
-      buyer: string,
-      seller: string,
-      buyerPaid: bool,
-      buyerPaidDate: ?number,
-      sellerPaid: bool,
-      sellerPaidDate: ?number,
-      transactionComplete: bool,
-      transactionCompleteDate: ?number,
-      error: ?string,
-      canceled: bool,
-      canceledDate: number,
-      requestPending: bool,
-    },
-  },
+  agreements: AgreementsType,
 };
 // Agreement List
 export type AgreementsType = {
-    [transactionHash:string]:{
-      creationDate: number,
-      position: string,
-      price: number,
-      buyer: string,
-      seller: string,
-      buyerPaid: bool,
-      buyerPaidDate: ?number,
-      sellerPaid: bool,
-      sellerPaidDate: ?number,
-      transactionComplete: bool,
-      transactionCompleteDate: ?number,
-      error: ?string,
-      canceled: bool,
-      canceledDate: number,
-      requestPending: bool,
-    },
+    [transactionHash:string]: AgreementType,
 };
 // single agreement
 export type AgreementType = {

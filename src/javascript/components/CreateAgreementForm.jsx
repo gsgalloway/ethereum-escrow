@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 
-type Props = {
+export type Props = {
   agreementPending: string,
   error: string,
   onFormSubmit: (buyer: string, seller: string, price: string) => void,

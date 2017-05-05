@@ -16,9 +16,9 @@ type Action =
   | TransactionCanceledAction
   | TransactionCancelFailedAction;
 
-type Dispatch = (action: Action | ThunkAction | PromiseAction) => any;
+export type AgreementListDispatch = (action: Action | ThunkAction | PromiseAction) => any;
 type GetState = () => Object;
-type ThunkAction = (dispatch: Dispatch, getState: GetState) => any;
+type ThunkAction = (dispatch: AgreementListDispatch, getState: GetState) => any;
 type PromiseAction = Promise<Action>;
 
 function requestPending(): RequestPendingAction {

@@ -3,7 +3,7 @@ import type {
   PendingAction,
   FulfilledAction,
   FailedAction
-} from '../actions/index';
+} from '../actions/createAgreement';
 
 type State = {
   +agreementPending: bool,

@@ -2,9 +2,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router'
-import { sendMoney, confirmTransaction, cancelTransaction, AgreementListDispatch } from '../actions/agreementList';
+import { sendMoney, confirmTransaction, cancelTransaction } from '../actions/agreementList';
 import Agreement from '../components/agreement';
-import type { AgreementsType } from '../types';
+import type { AgreementListType ,AgreementsType, reduxStoreType } from '../types';
+import type { AgreementListDispatch } from '../actions/agreementList';
 
 class AgreementList extends Component {
   // map over all agreements using allTransactions as values
@@ -20,8 +21,8 @@ class AgreementList extends Component {
     }
   };
 
-  // TODO: replace these two "any"s with legit types
-  const mapStateToProps = (state: any): any => {
+  const mapStateToProps = (state: reduxStoreType): AgreementListType => {
+    console.log(state);
     const agreements: AgreementsType = state.agreementList.agreements;
     return {
       agreements

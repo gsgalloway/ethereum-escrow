@@ -13,9 +13,9 @@ type Action =
 // taken from flow documentation
 // probably will slim this down once
 // I understand redux-thunk better
-type Dispatch = (action: Action | ThunkAction | PromiseAction) => any;
+export type CreateAgreementDispatch = (action: Action | ThunkAction | PromiseAction) => any;
 type GetState = () => Object;
-type ThunkAction = (dispatch: Dispatch, getState: GetState) => any;
+type ThunkAction = (dispatch: CreateAgreementDispatch, getState: GetState) => any;
 type PromiseAction = Promise<Action>;
 
 export function createAgreementPending(): PendingAction {
