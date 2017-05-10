@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React, { Component } from 'react';
 import { Link } from 'react-router'
 
 
@@ -9,7 +10,7 @@ export default class Home extends Component {
         <p>This is the home page! Here's the routes:</p>
         <ul>
             <li><Link to="/createAgreement">Create New Agreement of Sale</Link></li>
-            <li><Link to="/viewAgreement">View Existing Agreement</Link></li>
+            <li><Link to="/AgreementList">View Existing Agreement</Link></li>
         </ul>
       </div>
     );

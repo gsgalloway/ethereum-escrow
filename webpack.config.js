@@ -3,7 +3,6 @@ var path = require('path');
 var webpack = require("webpack");
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var FlowBabelWebpackPlugin = require('flow-babel-webpack-plugin');
 
 var environment = process.env.NODE_ENV || "development";
 
@@ -41,7 +40,6 @@ module.exports = {
         ENV: '"' + process.env.NODE_ENV + '"',
         WEB3_PROVIDER_LOCATION: '"' + process.env.WEB3_PROVIDER_LOCATION + '"'
     }),
-    new FlowBabelWebpackPlugin(),
     new webpack.ProvidePlugin(provided),
     new CopyWebpackPlugin([
       { from: './src/index.html', to: "index.html" },

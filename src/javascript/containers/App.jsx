@@ -1,3 +1,4 @@
+// @flow
 import React, { Component, PropTypes } from 'react';
 
 
@@ -6,5 +7,5 @@ export default class App extends Component {
     return <div id="app-content">
       {this.props.children}
     </div>
-  }
+  };
 };
