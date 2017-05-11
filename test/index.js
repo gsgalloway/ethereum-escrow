@@ -1,3 +1,4 @@
-import TrustlessEscrow from './TrustlessEscrow';
+import contracts from './contracts';
+import actions from './actions';
 
-export default TrustlessEscrow;
+export {contracts, actions};
