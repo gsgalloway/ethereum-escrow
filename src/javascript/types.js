@@ -1,9 +1,8 @@
+// @flow
+
 // global state
 export type reduxStoreType = {
-  agreementList: {
-    agreements: AgreementListState,
-
-  }
+  agreementList: AgreementListState,
   createAgreement: {
     agreementPending: bool,
     error: string,
@@ -14,6 +13,7 @@ export type reduxStoreType = {
 export type AgreementListState = {
   agreements: AgreementsType,
 };
+
 // Agreement List
 export type AgreementsType = {
     [transactionHash:string]: AgreementType,

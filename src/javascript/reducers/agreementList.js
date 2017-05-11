@@ -11,7 +11,7 @@ import type {
 } from '../actions/agreementList';
 
 import type {
-  AgreementListType,
+  AgreementListState,
   AgreementType
 } from '../types';
 
@@ -25,7 +25,7 @@ type Action =
   | TransactionCanceledAction
   | TransactionCancelFailedAction;
 
-const INITIAL_STATE: AgreementListType = {
+const INITIAL_STATE: AgreementListState = {
   agreements: {
     "asdfasdfas": {
       creationDate: 1493690737487,
@@ -46,15 +46,17 @@ const INITIAL_STATE: AgreementListType = {
     },
   },
 };
-export default function agreementListReducer(state: AgreementListType = INITIAL_STATE, action: Action): AgreementListType {
+export default function agreementListReducer(state: AgreementListState = INITIAL_STATE, action: Action): AgreementListState {
   const transaction: AgreementType = state[action.payload];
+  // TODO: this transaction hash has to have come from the action
+  const transactionHash = 'TODO_TX_HASH_NOT_IMPLEMENTED';
   switch (action.type) {
     // TODO: figure out if putting "error:""" is
     // actually the way to do it
     case 'REQUEST_PENDING':
       return {
         ...state,
-        [transaction]: {
+        [transactionHash]: {
           ...transaction,
           requestPending: true,
         }
@@ -63,7 +65,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
     case 'BUYER_SENT':
       return {
         ...state,
-        [transaction]: {
+        [transactionHash]: {
           ...transaction,
           buyerPaid: true,
           buyerPaidDate: Date.now(),
@@ -74,7 +76,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
     case 'SELLER_SENT':
       return {
         ...state,
-        [transaction]: {
+        [transactionHash]: {
           ...transaction,
           senderPaid: true,
           senderPaidDate: Date.now(),
@@ -85,7 +87,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
     case 'SEND_FAILED':
       return {
         ...state,
-        [transaction]: {
+        [transactionHash]: {
           ...transaction,
           error: "Sending your ether failed.",
           requestPending: false,
@@ -95,7 +97,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
     case 'CONFIRMED':
       return {
         ...state,
-        [transaction]: {
+        [transactionHash]: {
           ...transaction,
           transationComplete: true,
           transationCompleteDate: Date.now(),
@@ -106,7 +108,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
     case 'CONFIRM_FAILED':
       return {
         ...state,
-        [transaction]: {
+        [transactionHash]: {
           ...transaction,
           error: "Confirmation failed. Are you connected to the internet?",
           requestPending: false,
@@ -116,7 +118,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
     case 'TRANSACTION_CANCELED':
       return {
         ...state,
-        [transaction]: {
+        [transactionHash]: {
           ...transaction,
           canceled: true,
           canceledDate: Date.now(),
@@ -127,7 +129,7 @@ export default function agreementListReducer(state: AgreementListType = INITIAL_
     case 'TRANSACTION_CANCEL_FAILED':
       return {
         ...state,
-        [transaction]: {
+        [transactionHash]: {
           ...transaction,
           error: "Cancellation failed",
           requestPending: false,

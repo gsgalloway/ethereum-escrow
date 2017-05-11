@@ -8,7 +8,7 @@ import type { reduxStoreType } from '../types';
 import type { CreateAgreementDispatch } from '../actions/createAgreement';
 
 type Props = {
-  agreementPending: string,
+  agreementPending: bool,
   error: string,
 }
 
