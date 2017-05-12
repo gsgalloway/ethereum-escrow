@@ -1,7 +1,10 @@
+import trustlessEscrowContract from '../web3';
+(trustlessEscrowContract: Contract<TrustlessEscrowInstance>);
+
 export type RequestPendingAction = { type: 'REQUEST_PENDING' };
 export type BuyerSentAction = { type: 'BUYER_SENT', payload: string };
 export type SellerSentAction = { type: 'SELLER_SENT', payload: string };
-export type SendFailedAction = { type: 'SEND_FAILED', payload: string };
+export type SendFailedAction = { type: 'SEND_FAILED', payload: {agreementId: number, error: any} };
 export type ConfirmedAction = { type: 'CONFIRMED', payload: string };
 export type ConfirmedFailedAction = { type: 'CONFIRM_FAILED', payload: string };
 export type TransactionCanceledAction = { type: 'TRANSACTION_CANCELED', payload: string };
@@ -26,66 +29,89 @@ function requestPending(): RequestPendingAction {
     type: 'REQUEST_PENDING'
   }
 }
-function buyerSendsMoney(transactionHash: string): BuyerSentAction {
-  return {
-    type: 'BUYER_SENT',
-    payload: transactionHash,
+
+// TODO: combine copy-pasted code from buyerSendsMoney and sellerSendsMoney
+function buyerSendsMoney(agreementId: number): BuyerSentAction {
+  return function (dispatch) {
+    return trustlessEscrowContract.deployed().then((instance: TrustlessEscrowInstance) => {
+      let buyersCost;
+      return instance.agreements.call(agreementId)
+          .then((agreementStruct: any[]) => {
+            buyersCost = agreementStruct[2].times(2);
+          })
+          .then(() => instance.buyerConfirmsAgreement(agreementId, {value: buyersCost}))
+          .then(() => {return {type: 'BUYER_SENT', payload: agreementId}})
+          .catch((e) => dispatch(sendingMoneyFailed(agreementId)))
+      });
   }
 }
-function sellerSendsMoney(transactionHash: string): SellerSentAction {
-  return {
-    type: 'SELLER_SENT',
-    payload: transactionHash,
+function sellerSendsMoney(agreementId: number, error: any): SellerSentAction {
+  return function (dispatch) {
+    return trustlessEscrowContract.deployed().then((instance: TrustlessEscrowInstance) => {
+      let sellersCost;
+      return instance.agreements.call(agreementId)
+          .then((agreementStruct: any[]) => {
+            sellersCost = agreementStruct[2];
+          })
+          .then(() => instance.sellerConfirmsAgreement(agreementId, {value: sellersCost}))
+          .then(() => {return {type: 'SELLER_SENT', payload: agreementId}})
+          .catch((e) => dispatch(sendingMoneyFailed(agreementId)))
+      });
   }
 }
-function sendingMoneyFailed(transactionHash: string): SendFailedAction {
+function sendingMoneyFailed(agreementId: number, error: any): SendFailedAction {
   return {
     type: 'SEND_FAILED',
-    payload: transactionHash,
+    payload: {
+      agreementId,
+      error
+    }
   }
 }
-export function sendMoney(transactionHash: string, position: string):ThunkAction {
+export function sendMoney(agreementId: number, position: "buyer" | "seller"):ThunkAction {
   return (dispatch) => {
     // as always, return a spinner
     dispatch(requestPending());
     //TODO: need to add the correct reducers
 
-
-    return dispatch(sellerSendsMoney(transactionHash));
+    if (position === "buyer")
+      return dispatch(buyerSendsMoney(agreementId));
+    else
+      return dispatch(sellerSendsMoney(agreementId));
   }
 }
-function confirmTransactionSuccess(transactionHash: string): ConfirmedAction {
+function confirmTransactionSuccess(agreementId: number): ConfirmedAction {
   return {
     type: 'CONFIRMED',
-    payload: transactionHash,
+    payload: agreementId,
   }
 }
-function confirmTransactionFailed(transactionHash: string): ConfirmedFailedAction {
+function confirmTransactionFailed(agreementId: number): ConfirmedFailedAction {
   return {
     type: 'CONFIRM_FAILED',
-    payload: transactionHash,
+    payload: agreementId,
   }
 }
-export function comfirmTransaction(transactionHash: string): ThunkAction {
+export function comfirmTransaction(agreementId: number): ThunkAction {
   return (dispatch) => {
     dispatch(requestPending());
     // check that the transaction was finished
   }
 }
 
-function canceledTransaction(transactionHash: string): TransactionCanceledAction {
+function canceledTransaction(agreementId: number): TransactionCanceledAction {
   return {
     type: 'TRANSACTION_CANCELED',
-    payload: transactionHash,
+    payload: agreementId,
   }
 }
-function cancelTransactionFailed(transactionHash: string): TransactionCancelFailedAction {
+function cancelTransactionFailed(agreementId: number): TransactionCancelFailedAction {
   return {
     type: 'TRANSACTION_CANCEL_FAILED',
-    payload: transactionHash,
+    payload: agreementId,
   }
 }
-export function cancelTransaction(transactionHash: string): ThunkAction {
+export function cancelTransaction(agreementId: number): ThunkAction {
   return (dispatch) => {
     dispatch(requestPending());
     // check and then return
