@@ -28,7 +28,7 @@ declare class ContractInstance {
     networks?: {[string]: {}};
     address: string;
     transactionHash: string | null;
-    contract: Contract;
+    contract: Contract<*>;
 };
 
 
@@ -39,4 +39,20 @@ declare class Contract<InstanceT: ContractInstance> {
     deployed(): Promise<InstanceT>;
     link(instance: ContractInstance): void;
     networks(): string[];
+};
+
+
+declare type TransactionResult = {
+    tx: string,
+    receipt: {
+        transactionHash: string,  // same as tx
+        transactionIndex: number,
+        blockHash: string,
+        blockNumber: number,
+        gasUsed: number,
+        cumulativeGasUsed: number,
+        contractAddress: string | null,
+        logs: any[],
+    },
+    logs: any[],
 };
