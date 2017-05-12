@@ -18,9 +18,9 @@ declare class TrustlessEscrowInstance extends ContractInstance {
   agreementIsLocked: {
     call(agreementId: number): Promise<bool>;
   };
-  buyerConfirmsAgreement(agreementId: number): Promise<TransactionResult>;
-  sellerConfirmsAgreement(agreementId: number): Promise<TransactionResult>;
-  destroy(): Promise<TransactionResult>;
-  createAgreement(buyerAddress: string, sellerAddress: string, value: number): Promise<TransactionResult>;
-  confirmReceived(agreementId: number): Promise<TransactionResult>;
+  buyerConfirmsAgreement(agreementId: number, txOptions: TxParams): Promise<TransactionResult>;
+  sellerConfirmsAgreement(agreementId: number, txOptions: TxParams): Promise<TransactionResult>;
+  destroy(txOptions?: TxParams): Promise<TransactionResult>;
+  createAgreement(buyerAddress: string, sellerAddress: string, value: number, txOptions?: TxParams): Promise<TransactionResult>;
+  confirmReceived(agreementId: number, txOptions?: TxParams): Promise<TransactionResult>;
 };
