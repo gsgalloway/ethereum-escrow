@@ -1,3 +1,4 @@
+// @flow
 import trustlessEscrowContract from '../web3';
 (trustlessEscrowContract: Contract<TrustlessEscrowInstance>);
 
