@@ -2,16 +2,17 @@
 import trustlessEscrowContract from '../web3';
 (trustlessEscrowContract: Contract<TrustlessEscrowInstance>);
 
-export type RequestPendingAction = { type: 'REQUEST_PENDING' };
-export type BuyerSentAction = { type: 'BUYER_SENT', payload: string };
-export type SellerSentAction = { type: 'SELLER_SENT', payload: string };
+export type RequestPendingAction = { type: 'REQUEST_PENDING', payload: number  };
+export type BuyerSentAction = { type: 'BUYER_SENT', payload: number };
+export type SellerSentAction = { type: 'SELLER_SENT', payload: number };
 export type SendFailedAction = { type: 'SEND_FAILED', payload: {agreementId: number, error: any} };
-export type ConfirmedAction = { type: 'CONFIRMED', payload: string };
-export type ConfirmedFailedAction = { type: 'CONFIRM_FAILED', payload: string };
-export type TransactionCanceledAction = { type: 'TRANSACTION_CANCELED', payload: string };
-export type TransactionCancelFailedAction = { type: 'TRANSACTION_CANCEL_FAILED', payload: string };
+export type ConfirmedAction = { type: 'CONFIRMED', payload: number };
+export type ConfirmedFailedAction = { type: 'CONFIRM_FAILED', payload: number };
+export type TransactionCanceledAction = { type: 'TRANSACTION_CANCELED', payload: number };
+export type TransactionCancelFailedAction = { type: 'TRANSACTION_CANCEL_FAILED', payload: number };
 
 type Action =
+  | RequestPendingAction
   | BuyerSentAction
   | SellerSentAction
   | SendFailedAction
@@ -25,14 +26,15 @@ type GetState = () => Object;
 type ThunkAction = (dispatch: AgreementListDispatch, getState: GetState) => any;
 type PromiseAction = Promise<Action>;
 
-function requestPending(): RequestPendingAction {
+function requestPending(agreementId: number): RequestPendingAction {
   return {
-    type: 'REQUEST_PENDING'
+    type: 'REQUEST_PENDING',
+    payload: agreementId,
   }
 }
 
 // TODO: combine copy-pasted code from buyerSendsMoney and sellerSendsMoney
-function buyerSendsMoney(agreementId: number): BuyerSentAction {
+function buyerSendsMoney(agreementId: number): ThunkAction {
   return function (dispatch) {
     return trustlessEscrowContract.deployed().then((instance: TrustlessEscrowInstance) => {
       let buyersCost;
@@ -46,7 +48,7 @@ function buyerSendsMoney(agreementId: number): BuyerSentAction {
       });
   }
 }
-function sellerSendsMoney(agreementId: number, error: any): SellerSentAction {
+function sellerSendsMoney(agreementId: number, error: any): ThunkAction {
   return function (dispatch) {
     return trustlessEscrowContract.deployed().then((instance: TrustlessEscrowInstance) => {
       let sellersCost;
@@ -72,7 +74,7 @@ function sendingMoneyFailed(agreementId: number, error: any): SendFailedAction {
 export function sendMoney(agreementId: number, position: "buyer" | "seller"):ThunkAction {
   return (dispatch) => {
     // as always, return a spinner
-    dispatch(requestPending());
+    dispatch(requestPending(agreementId));
     //TODO: need to add the correct reducers
 
     if (position === "buyer")
@@ -93,9 +95,9 @@ function confirmTransactionFailed(agreementId: number): ConfirmedFailedAction {
     payload: agreementId,
   }
 }
-export function comfirmTransaction(agreementId: number): ThunkAction {
+export function confirmTransaction(agreementId: number): ThunkAction {
   return (dispatch) => {
-    dispatch(requestPending());
+    dispatch(requestPending(agreementId));
     // check that the transaction was finished
   }
 }
@@ -114,7 +116,7 @@ function cancelTransactionFailed(agreementId: number): TransactionCancelFailedAc
 }
 export function cancelTransaction(agreementId: number): ThunkAction {
   return (dispatch) => {
-    dispatch(requestPending());
+    dispatch(requestPending(agreementId));
     // check and then return
 
   }

@@ -16,8 +16,9 @@ export type AgreementListState = {
 
 // Agreement List
 export type AgreementsType = {
-    [transactionHash:string]: AgreementType,
+    [agreementId: string]: AgreementType,
 };
+
 // single agreement
 export type AgreementType = {
   creationDate: number,
