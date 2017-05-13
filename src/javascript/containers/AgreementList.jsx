@@ -32,13 +32,13 @@ class AgreementList extends Component {
   // once we know what it looks like
   const mapDispatchToProps = (dispatch: AgreementListDispatch): any => {
     return {
-      sendMoney: (agreementId: number, position: "buyer" | "seller"): void => {
+      sendMoney: (agreementId: string, position: "buyer" | "seller"): void => {
         dispatch(sendMoney(agreementId, position));
       },
-      confirmAgreement: (agreementId: number): void => {
+      confirmAgreement: (agreementId: string): void => {
         dispatch(confirmAgreement(agreementId));
       },
-      cancelAgreement: (agreementId: number): void => {
+      cancelAgreement: (agreementId: string): void => {
         dispatch(cancelAgreement(agreementId));
       }
     }

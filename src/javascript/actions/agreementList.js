@@ -2,7 +2,7 @@
 import trustlessEscrowContract from '../web3';
 (trustlessEscrowContract: Contract<TrustlessEscrowInstance>);
 
-export type RequestPendingAction = { type: 'REQUEST_PENDING', payload: number  };
+export type RequestPendingAction = { type: 'REQUEST_PENDING', payload: string  };
 export type BuyerSentAction = { type: 'BUYER_SENT', payload: number };
 export type SellerSentAction = { type: 'SELLER_SENT', payload: number };
 export type SendFailedAction = { type: 'SEND_FAILED', payload: {agreementId: number, error: any} };
@@ -26,7 +26,7 @@ type GetState = () => Object;
 type ThunkAction = (dispatch: AgreementListDispatch, getState: GetState) => any;
 type PromiseAction = Promise<Action>;
 
-function requestPending(agreementId: number): RequestPendingAction {
+function requestPending(agreementId: string): RequestPendingAction {
   return {
     type: 'REQUEST_PENDING',
     payload: agreementId,
@@ -71,16 +71,19 @@ function sendingMoneyFailed(agreementId: number, error: any): SendFailedAction {
     }
   }
 }
-export function sendMoney(agreementId: number, position: "buyer" | "seller"):ThunkAction {
+export function sendMoney(agreementId: string, position: "buyer" | "seller"):ThunkAction {
+  // convert agreementId to number
+  const _agreementId: number = Number(agreementId);
+
   return (dispatch) => {
     // as always, return a spinner
     dispatch(requestPending(agreementId));
     //TODO: need to add the correct reducers
 
     if (position === "buyer")
-      return dispatch(buyerSendsMoney(agreementId));
+      return dispatch(buyerSendsMoney(_agreementId));
     else
-      return dispatch(sellerSendsMoney(agreementId));
+      return dispatch(sellerSendsMoney(_agreementId));
   }
 }
 function confirmAgreementSuccess(agreementId: number): ConfirmedAction {
@@ -95,7 +98,10 @@ function confirmAgreementFailed(agreementId: number): ConfirmedFailedAction {
     payload: agreementId,
   }
 }
-export function confirmAgreement(agreementId: number): ThunkAction {
+export function confirmAgreement(agreementId: string): ThunkAction {
+  // convert agreementId to number
+  const _agreementId: number = Number(agreementId);
+
   return (dispatch) => {
     dispatch(requestPending(agreementId));
     // check that the transaction was finished
@@ -114,7 +120,10 @@ function cancelAgreementFailed(agreementId: number): AgreementCancelFailedAction
     payload: agreementId,
   }
 }
-export function cancelAgreement(agreementId: number): ThunkAction {
+export function cancelAgreement(agreementId: string): ThunkAction {
+  // convert agreementId to number
+  const _agreementId: number = Number(agreementId);
+
   return (dispatch) => {
     dispatch(requestPending(agreementId));
     // check and then return
