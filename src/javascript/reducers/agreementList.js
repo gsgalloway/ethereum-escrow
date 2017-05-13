@@ -6,8 +6,8 @@ import type {
   SendFailedAction,
   ConfirmedAction,
   ConfirmedFailedAction,
-  TransactionCanceledAction,
-  TransactionCancelFailedAction
+  AgreementCanceledAction,
+  AgreementCancelFailedAction
 } from '../actions/agreementList';
 
 import type {
@@ -22,8 +22,8 @@ type Action =
   | SendFailedAction
   | ConfirmedAction
   | ConfirmedFailedAction
-  | TransactionCanceledAction
-  | TransactionCancelFailedAction;
+  | AgreementCanceledAction
+  | AgreementCancelFailedAction;
 
 // remove this once we get better values
 const PLACEHOLDER_AGREEMENT_ID: string = (123123412312412412).toString();
@@ -41,8 +41,8 @@ const INITIAL_STATE: AgreementListState = {
       buyerPaidDate: 1493690737488,
       sellerPaid: true,
       sellerPaidDate: 1493690737497,
-      transactionComplete: false,
-      transactionCompleteDate: 0,
+      agreementComplete: false,
+      agreementCompleteDate: 0,
       error: "",
       canceled: false,
       canceledDate: 1493690737506,
@@ -56,14 +56,14 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
   // or passes just the agreement int. This could be a very long
   let agreementId: string = typeof action.payload === 'object' ? action.payload[0].toString() : action.payload.toString();
 
-  const transaction: AgreementType = state[agreementId];
+  const agreement: AgreementType = state[agreementId];
 
   switch (action.type) {
     case 'REQUEST_PENDING':
       return {
         ...state,
         [agreementId]: {
-          ...transaction,
+          ...agreement,
           requestPending: true,
         }
       }
@@ -72,7 +72,7 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
       return {
         ...state,
         [agreementId]: {
-          ...transaction,
+          ...agreement,
           buyerPaid: true,
           buyerPaidDate: Date.now(),
           error: "",
@@ -83,7 +83,7 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
       return {
         ...state,
         [agreementId]: {
-          ...transaction,
+          ...agreement,
           senderPaid: true,
           senderPaidDate: Date.now(),
           error: "",
@@ -94,7 +94,7 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
       return {
         ...state,
         [agreementId]: {
-          ...transaction,
+          ...agreement,
           error: "Sending your ether failed.",
           requestPending: false,
         },
@@ -104,7 +104,7 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
       return {
         ...state,
         [agreementId]: {
-          ...transaction,
+          ...agreement,
           transationComplete: true,
           transationCompleteDate: Date.now(),
           error: "",
@@ -115,28 +115,28 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
       return {
         ...state,
         [agreementId]: {
-          ...transaction,
+          ...agreement,
           error: "Confirmation failed. Are you connected to the internet?",
           requestPending: false,
         },
       };
     // cancel button
-    case 'TRANSACTION_CANCELED':
+    case 'AGREEMENT_CANCELED':
       return {
         ...state,
         [agreementId]: {
-          ...transaction,
+          ...agreement,
           canceled: true,
           canceledDate: Date.now(),
           error: "",
           requestPending: false,
         },
       };
-    case 'TRANSACTION_CANCEL_FAILED':
+    case 'AGREEMENT_CANCEL_FAILED':
       return {
         ...state,
         [agreementId]: {
-          ...transaction,
+          ...agreement,
           error: "Cancellation failed",
           requestPending: false,
         }

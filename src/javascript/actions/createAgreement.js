@@ -25,10 +25,10 @@ export function createAgreementPending(): PendingAction {
   };
 }
 
-export function createAgreementFulfilled(transactionHash: string): FulfilledAction {
+export function createAgreementFulfilled(agreementId: string): FulfilledAction {
   return {
     type: 'CREATE_AGREEMENT_FULFILLED',
-    payload: transactionHash
+    payload: agreementId
   };
 }
 
@@ -39,7 +39,7 @@ export function createAgreementFailed(error: string): FailedAction{
   };
 }
 
-// transaction options will be "any" for now
+// agreement options will be "any" for now
 export function createAgreement(buyer: string, seller: string, price: number, txOptions: any): ThunkAction {
 
   // Thunk middleware knows how to handle functions.

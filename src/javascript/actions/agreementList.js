@@ -8,8 +8,8 @@ export type SellerSentAction = { type: 'SELLER_SENT', payload: number };
 export type SendFailedAction = { type: 'SEND_FAILED', payload: {agreementId: number, error: any} };
 export type ConfirmedAction = { type: 'CONFIRMED', payload: number };
 export type ConfirmedFailedAction = { type: 'CONFIRM_FAILED', payload: number };
-export type TransactionCanceledAction = { type: 'TRANSACTION_CANCELED', payload: number };
-export type TransactionCancelFailedAction = { type: 'TRANSACTION_CANCEL_FAILED', payload: number };
+export type AgreementCanceledAction = { type: 'AGREEMENT_CANCELED', payload: number };
+export type AgreementCancelFailedAction = { type: 'AGREEMENT_CANCEL_FAILED', payload: number };
 
 type Action =
   | RequestPendingAction
@@ -18,8 +18,8 @@ type Action =
   | SendFailedAction
   | ConfirmedAction
   | ConfirmedFailedAction
-  | TransactionCanceledAction
-  | TransactionCancelFailedAction;
+  | AgreementCanceledAction
+  | AgreementCancelFailedAction;
 
 export type AgreementListDispatch = (action: Action | ThunkAction | PromiseAction) => any;
 type GetState = () => Object;
@@ -83,38 +83,38 @@ export function sendMoney(agreementId: number, position: "buyer" | "seller"):Thu
       return dispatch(sellerSendsMoney(agreementId));
   }
 }
-function confirmTransactionSuccess(agreementId: number): ConfirmedAction {
+function confirmAgreementSuccess(agreementId: number): ConfirmedAction {
   return {
     type: 'CONFIRMED',
     payload: agreementId,
   }
 }
-function confirmTransactionFailed(agreementId: number): ConfirmedFailedAction {
+function confirmAgreementFailed(agreementId: number): ConfirmedFailedAction {
   return {
     type: 'CONFIRM_FAILED',
     payload: agreementId,
   }
 }
-export function confirmTransaction(agreementId: number): ThunkAction {
+export function confirmAgreement(agreementId: number): ThunkAction {
   return (dispatch) => {
     dispatch(requestPending(agreementId));
     // check that the transaction was finished
   }
 }
 
-function canceledTransaction(agreementId: number): TransactionCanceledAction {
+function canceledAgreement(agreementId: number): AgreementCanceledAction {
   return {
-    type: 'TRANSACTION_CANCELED',
+    type: 'AGREEMENT_CANCELED',
     payload: agreementId,
   }
 }
-function cancelTransactionFailed(agreementId: number): TransactionCancelFailedAction {
+function cancelAgreementFailed(agreementId: number): AgreementCancelFailedAction {
   return {
-    type: 'TRANSACTION_CANCEL_FAILED',
+    type: 'AGREEMENT_CANCEL_FAILED',
     payload: agreementId,
   }
 }
-export function cancelTransaction(agreementId: number): ThunkAction {
+export function cancelAgreement(agreementId: number): ThunkAction {
   return (dispatch) => {
     dispatch(requestPending(agreementId));
     // check and then return

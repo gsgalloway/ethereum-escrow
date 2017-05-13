@@ -6,9 +6,9 @@ let TrustlessEscrow = artifacts.require("TrustlessEscrow");
 contract('agreementList', function(accounts: string[]): void {
     describe.skip("sendMoney");
 
-    describe.skip("comfirmTransaction");
+    describe.skip("confirmAgreement");
 
-    describe.skip("cancelTransaction");
+    describe.skip("cancelAgreement");
 });
 
 
