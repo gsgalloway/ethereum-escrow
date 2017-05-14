@@ -19,7 +19,6 @@ class CreateAgreement extends Component {
 }
 
 const mapStateToProps = (state: reduxStoreType): Props => {
-  console.log(state);
   return {
     agreementPending: state.createAgreement.agreementPending,
     error: state.createAgreement.error

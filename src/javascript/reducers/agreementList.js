@@ -30,31 +30,42 @@ const PLACEHOLDER_AGREEMENT_ID: string = (123123412312412412).toString();
 
 
 const INITIAL_STATE: AgreementListState = {
-  agreements: {
-    PLACEHOLDER_AGREEMENT_ID: {
-      creationDate: 1493690737487,
-      position: "buyer",
-      price: 1234,
-      buyer: "123.12.23.21",
-      seller: "1231.123.12.1231",
-      buyerPaid: true,
-      buyerPaidDate: 1493690737488,
-      sellerPaid: true,
-      sellerPaidDate: 1493690737497,
-      agreementComplete: false,
-      agreementCompleteDate: 0,
-      error: "",
-      canceled: false,
-      canceledDate: 1493690737506,
-      requestPending: false,
-    },
+  "123123412312412412": {
+    creationDate: 1493690737487,
+    position: "buyer",
+    price: 1234,
+    buyer: "123.12.23.21",
+    seller: "1231.123.12.1231",
+    buyerPaid: true,
+    buyerPaidDate: 1493690737488,
+    sellerPaid: true,
+    sellerPaidDate: 1493690737497,
+    agreementComplete: false,
+    agreementCompleteDate: 0,
+    error: "",
+    canceled: false,
+    canceledDate: 1493690737506,
+    requestPending: false,
   },
+  allAgreementIds: ["123123412312412412"],
 };
 
 export default function agreementListReducer(state: AgreementListState = INITIAL_STATE, action: Action): AgreementListState {
   // set agreementId, and check if payload passes an object with an error
   // or passes just the agreement int. This could be a very long
-  let agreementId: string = typeof action.payload === 'object' ? action.payload[0].toString() : action.payload.toString();
+
+  let agreementId: string = '';
+
+  // flow really doesn't like this ternary operator, makes me super sad
+  // if (action.payload) {
+  //   agreementId =  typeof action.payload === 'object' ?  action.payload.agreementId.toString(): action.payload.toString();
+  // }
+
+  if (typeof action.payload === 'object') {
+    agreementId = action.payload.agreementId.toString();
+  } else if (action.payload) {
+    agreementId = action.payload.toString();
+  }
 
   const agreement: AgreementType = state[agreementId];
 

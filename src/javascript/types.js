@@ -11,12 +11,8 @@ export type reduxStoreType = {
 
 // state object for agreementList reducer
 export type AgreementListState = {
-  agreements: AgreementsType,
-};
-
-// Agreement List
-export type AgreementsType = {
     [agreementId: string]: AgreementType,
+    allAgreementIds: Array<string>,
 };
 
 // single agreement

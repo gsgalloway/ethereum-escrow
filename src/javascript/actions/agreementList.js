@@ -66,8 +66,8 @@ function sendingMoneyFailed(agreementId: number, error: any): SendFailedAction {
   return {
     type: 'SEND_FAILED',
     payload: {
-      agreementId,
-      error
+      agreementId: agreementId,
+      error: error
     }
   }
 }

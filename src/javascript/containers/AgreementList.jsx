@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router'
 import { sendMoney, confirmAgreement, cancelAgreement } from '../actions/agreementList';
 import Agreement from '../components/agreement';
-import type { AgreementListState, AgreementsType, reduxStoreType } from '../types';
+import type { AgreementListState, reduxStoreType } from '../types';
 import type { AgreementListDispatch } from '../actions/agreementList';
 
 class AgreementList extends Component {
@@ -21,10 +21,10 @@ class AgreementList extends Component {
     }
   };
 
-  const mapStateToProps = (state: reduxStoreType): AgreementListState => {
-    const agreements: AgreementsType = state.agreementList.agreements;
+  const mapStateToProps = (state: reduxStoreType): {agreementList: AgreementListState} => {
+    const agreementList: AgreementListState = state.agreementList;
     return {
-      agreements
+      agreementList
     };
   };
 
