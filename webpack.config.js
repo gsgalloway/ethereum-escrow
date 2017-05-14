@@ -21,10 +21,13 @@ fs.readdirSync(contracts_directory).forEach(function(file) {
 });
 
 module.exports = {
-  entry: './src/javascript/index.jsx',
+  entry: {
+    app: './src/javascript/index.jsx',
+    test: './test/index.js',
+  },
   output: {
     path: "./build",
-    filename: 'app.js'
+    filename: '[name].js'
   },
   devtool: 'source-map',
   module: {

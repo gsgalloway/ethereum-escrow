@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
-import type AgreementType from '../types';
+import type {AgreementListState} from '../types';
 
-const Agreement = (props: AgreementType) => {
+const Agreement = (props: AgreementListState) => {
   return (
       <p>Agreement Rendered</p>
   );

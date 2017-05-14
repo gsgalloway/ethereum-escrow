@@ -15,34 +15,56 @@ contract SelfDestructable {
 }
 
 contract TrustlessEscrow is SelfDestructable {
-    uint public value;
-    address public seller;
-    address public buyer;
-    bool public buyerConfirmedAgreement;
-    bool public sellerConfirmedAgreement;
+    struct Agreement {
+        address buyer;
+        address seller;
+        uint32 value;
+        bool buyerConfirmedAgreement;
+        bool sellerConfirmedAgreement;
+    }
+
+    struct ParticipantToAgreementsMapping {
+        uint32[] agreementIds;
+        // uint32 numAgreements;
+    }
+
+    uint32 public numAgreements;
+    mapping (uint32 => Agreement) public agreements;
+    mapping (address => uint32[]) public agreementIdsByParticipant;
+    mapping (address => uint32) public numAgreementsPerParticipant;
 
     function TrustlessEscrow(){}
 
-    function createAgreement(address _buyer, address _seller, uint _value) {
-        seller = _seller;
-        buyer = _buyer;
-        value = _value;
-        buyerConfirmedAgreement = false;
-        sellerConfirmedAgreement = false;
+    /***************************************************************/
+    /************ Requires Transactions (Writes to State) **********/
+    /***************************************************************/
+
+    function createAgreement(address buyer, address seller, uint32 value)
+    {
+        var agreement = Agreement(buyer, seller, value, false, false);
+        var agreementId = numAgreements;
+        agreements[agreementId] = agreement;
+        agreementIdsByParticipant[buyer].push(agreementId);
+        numAgreementsPerParticipant[buyer]++;
+        agreementIdsByParticipant[seller].push(agreementId);
+        numAgreementsPerParticipant[seller]++;
+        numAgreements++;
     }
 
-    function buyerConfirmsAgreement() payable
-        onlyBuyer
-        require(msg.value == 2*value)
+    function buyerConfirmsAgreement(uint32 agreementId) payable
+        onlyBuyer(agreementId)
+        // TODO: index out of bounds
+        require(msg.value == 2*agreements[agreementId].value)
     {
-        buyerConfirmedAgreement = true;
+        agreements[agreementId].buyerConfirmedAgreement = true;
     }
 
-    function sellerConfirmsAgreement() payable
-        onlySeller
-        require(msg.value == value)
+    function sellerConfirmsAgreement(uint32 agreementId) payable
+        onlySeller(agreementId)
+        // TODO: index out of bounds
+        require(msg.value == agreements[agreementId].value)
     {
-        sellerConfirmedAgreement = true;
+        agreements[agreementId].sellerConfirmedAgreement = true;
     }
 
     /*function abortAgreement() {
@@ -70,26 +92,42 @@ contract TrustlessEscrow is SelfDestructable {
         }
     }*/
 
-    function confirmReceived()
-        onlyBuyer
-        require(buyerConfirmedAgreement && sellerConfirmedAgreement)
+    function confirmReceived(uint32 agreementId)
+        onlyBuyer(agreementId)
+        require(agreementIsLocked(agreementId))
     {
-        buyerConfirmedAgreement = false;
-        sellerConfirmedAgreement = false;
-        var unused = buyer.send(value);
-        unused = seller.send(value*2);
+        var agreement = agreements[agreementId];
+        agreement.buyerConfirmedAgreement = false;
+        agreement.sellerConfirmedAgreement = false;
+        // TODO: still need these unused variables in the latest solidity?
+        // TODO: rewrite this -- buyer and seller need to pull from this contract
+        // to prevent stack overflow attacks screwing the seller out of money
+        var unused = agreement.buyer.send(agreement.value);
+        unused = agreement.seller.send(agreement.value*2);
+    }
+
+    /************************************************************************/
+    /************ Does Not Require Transactions (Reads from State) **********/
+    /************************************************************************/
+
+    function agreementIsLocked(uint32 agreementId) constant returns (bool)
+    {
+        // TODO: array index out of bounds
+        return agreements[agreementId].buyerConfirmedAgreement &&
+               agreements[agreementId].sellerConfirmedAgreement;
     }
 
 
+    /************ Helper Methods *************/
 
-    modifier onlyBuyer()
+    modifier onlyBuyer(uint32 agreementId)
     {
-        if (msg.sender != buyer) throw;
+        if (msg.sender != agreements[agreementId].buyer) throw;
         _;
     }
-    modifier onlySeller()
+    modifier onlySeller(uint32 agreementId)
     {
-        if (msg.sender != seller) throw;
+        if (msg.sender != agreements[agreementId].seller) throw;
         _;
     }
     modifier require(bool _condition)

@@ -8,7 +8,7 @@ import type { reduxStoreType } from '../types';
 import type { CreateAgreementDispatch } from '../actions/createAgreement';
 
 type Props = {
-  agreementPending: string,
+  agreementPending: bool,
   error: string,
 }
 
@@ -19,7 +19,6 @@ class CreateAgreement extends Component {
 }
 
 const mapStateToProps = (state: reduxStoreType): Props => {
-  console.log(state);
   return {
     agreementPending: state.createAgreement.agreementPending,
     error: state.createAgreement.error

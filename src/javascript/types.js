@@ -1,9 +1,8 @@
+// @flow
+
 // global state
 export type reduxStoreType = {
-  agreementList: {
-    agreements: AgreementListState,
-
-  }
+  agreementList: AgreementListState,
   createAgreement: {
     agreementPending: bool,
     error: string,
@@ -12,12 +11,10 @@ export type reduxStoreType = {
 
 // state object for agreementList reducer
 export type AgreementListState = {
-  agreements: AgreementsType,
+    [agreementId: string]: AgreementType,
+    allAgreementIds: Array<string>,
 };
-// Agreement List
-export type AgreementsType = {
-    [transactionHash:string]: AgreementType,
-};
+
 // single agreement
 export type AgreementType = {
   creationDate: number,
@@ -29,8 +26,8 @@ export type AgreementType = {
   buyerPaidDate: ?number,
   sellerPaid: bool,
   sellerPaidDate: ?number,
-  transactionComplete: bool,
-  transactionCompleteDate: ?number,
+  agreementComplete: bool,
+  agreementCompleteDate: ?number,
   error: ?string,
   canceled: bool,
   canceledDate: number,

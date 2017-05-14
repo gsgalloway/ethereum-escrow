@@ -55,3 +55,7 @@ Here's some setup instructions for use with EthereumJS TestRPC and MetaMask in C
   - https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn/related?authuser=2
   - Create a password, then switch networks to the `localhost:8545` option
 - Navigate to http://localhost:8080 in a web3 compatible browser (Ex: Mist or MetaMask)
+
+## Running Tests
+
+The tests use Flow, so run `truffle build` to compile the tests and then run `truffle test ./build/test.js`

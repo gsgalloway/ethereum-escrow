@@ -1,8 +1,9 @@
 // @flow
-import TrustlessEscrow from '../web3';
+import trustlessEscrowContract from '../web3';
+(trustlessEscrowContract: Contract<TrustlessEscrowInstance>);
 
 export type PendingAction = { type: 'CREATE_AGREEMENT_PENDING' };
-export type FulfilledAction = { type: 'CREATE_AGREEMENT_FULFILLED' };
+export type FulfilledAction = { type: 'CREATE_AGREEMENT_FULFILLED', payload: string };
 export type FailedAction = { type: 'CREATE_AGREEMENT_FAILED', payload: string };
 
 // this is included in the documentation, but not referenced anywhere
@@ -24,10 +25,10 @@ export function createAgreementPending(): PendingAction {
   };
 }
 
-export function createAgreementFulfilled(transactionHash: string): FulfilledAction {
+export function createAgreementFulfilled(agreementId: string): FulfilledAction {
   return {
     type: 'CREATE_AGREEMENT_FULFILLED',
-    payload: transactionHash
+    payload: agreementId
   };
 }
 
@@ -38,8 +39,8 @@ export function createAgreementFailed(error: string): FailedAction{
   };
 }
 
-// transaction options will be "any" for now
-export function createAgreement(buyer: string, seller: string, price: string, txOptions: any): ThunkAction {
+// agreement options will be "any" for now
+export function createAgreement(buyer: string, seller: string, price: number, txOptions: any): ThunkAction {
 
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
@@ -57,9 +58,9 @@ export function createAgreement(buyer: string, seller: string, price: string, tx
 
     // In this case, we return a promise to wait for.
     // This is not required by thunk middleware, but it is convenient for us.
-    return TrustlessEscrow.deployed()
-      .then(escrowContract => escrowContract.createAgreement(buyer, seller, price, txOptions))
-      .then(txHash => dispatch(createAgreementFulfilled(txHash)))
-      .catch(e => dispatch(createAgreementFailed(e)));
+    return trustlessEscrowContract.deployed()
+      .then((instance: TrustlessEscrowInstance) => instance.createAgreement(buyer, seller, price, txOptions))
+      .then((txResult: TransactionResult) => dispatch(createAgreementFulfilled(txResult.tx)))
+      .catch((e: string) => dispatch(createAgreementFailed(e)));
   }
 }
