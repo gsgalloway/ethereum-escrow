@@ -62,6 +62,8 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
   // or passes just the agreement int. This could be a very long
 
   let agreementId: string = '';
+  let agreementsById: AgreementListType;
+  let agreement: AgreementType;
 
   // flow really doesn't like this ternary operator, makes me super sad
   // if (action.payload) {
@@ -74,12 +76,15 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
   if (typeof action.payload === 'object' && action.payload.agreementId) {
     //$FlowFixMe
     agreementId = action.payload.agreementId.toString();
-  } else if (action.payload.agreementId) {
+  } else if (typeof action.payload === 'string') {
     agreementId = action.payload.toString();
   }
+  if (agreementId !== '') {
+    agreementsById = state.agreementsById;
+    agreement = agreementsById[agreementId];
+  }
 
-  const agreementsById: AgreementListType = state.agreementsById;
-  const agreement: AgreementType = agreementsById[agreementId];
+
 
   switch (action.type) {
     case 'REQUEST_PENDING':
