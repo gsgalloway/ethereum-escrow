@@ -4,8 +4,15 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router'
 import { sendMoney, confirmAgreement, cancelAgreement, sortAgreements } from '../actions/agreementList';
 import Agreement from '../components/agreement';
-import type { AgreementListState, reduxStoreType } from '../types';
+import type { AgreementListType, AgreementListState, reduxStoreType } from '../types';
 import type { AgreementListDispatch } from '../actions/agreementList';
+
+type Props = {
+  allAgreementIds: Array<string>,
+  agreementList: AgreementListType,
+  sortKey: string,
+  sortKind: "descending" | "ascending",
+};
 
 class AgreementList extends Component {
   // map over all agreements using allAgreements as values
@@ -21,10 +28,19 @@ class AgreementList extends Component {
     }
   };
 
-  const mapStateToProps = (state: reduxStoreType): {agreementList: AgreementListState} => {
-    const agreementList: AgreementListState = state.agreementList;
+  const mapStateToProps = (state: reduxStoreType): Props => {
+
+    const agreementListObj: AgreementListState = state.agreementList,
+          allAgreementIds: Array<string> = agreementListObj.allAgreementIds,
+          agreementList: AgreementListType = agreementListObj.agreementsById,
+          sortKey: string = agreementListObj.sortKey,
+          sortKind: "descending" | "ascending" = agreementListObj.sortKind;
+
     return {
-      agreementList
+      allAgreementIds,
+      agreementList,
+      sortKey,
+      sortKind
     };
   };
 
