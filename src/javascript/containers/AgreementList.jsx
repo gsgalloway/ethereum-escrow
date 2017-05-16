@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router'
-import { sendMoney, confirmAgreement, cancelAgreement } from '../actions/agreementList';
+import { sendMoney, confirmAgreement, cancelAgreement, sortAgreements } from '../actions/agreementList';
 import Agreement from '../components/agreement';
 import type { AgreementListState, reduxStoreType } from '../types';
 import type { AgreementListDispatch } from '../actions/agreementList';
@@ -40,6 +40,9 @@ class AgreementList extends Component {
       },
       cancelAgreement: (agreementId: string): void => {
         dispatch(cancelAgreement(agreementId));
+      },
+      sortAgreements: (sortKey: string, sortKind: "ascending" | "descending"): void => {
+        dispatch(sortAgreements(sortKey, sortKind));
       }
     }
   };

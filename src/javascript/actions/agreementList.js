@@ -10,6 +10,7 @@ export type ConfirmedAction = { type: 'CONFIRMED', payload: number };
 export type ConfirmedFailedAction = { type: 'CONFIRM_FAILED', payload: number };
 export type AgreementCanceledAction = { type: 'AGREEMENT_CANCELED', payload: number };
 export type AgreementCancelFailedAction = { type: 'AGREEMENT_CANCEL_FAILED', payload: number };
+export type SortAgreementListAction = { type: 'AGREEMENT_LIST_SORT', payload: {sortKey: string, sortKind: "ascending" | "descending"}}
 
 type Action =
   | RequestPendingAction
@@ -19,7 +20,8 @@ type Action =
   | ConfirmedAction
   | ConfirmedFailedAction
   | AgreementCanceledAction
-  | AgreementCancelFailedAction;
+  | AgreementCancelFailedAction
+  | SortAgreementListAction;
 
 export type AgreementListDispatch = (action: Action | ThunkAction | PromiseAction) => any;
 type GetState = () => Object;
@@ -128,5 +130,15 @@ export function cancelAgreement(agreementId: string): ThunkAction {
     dispatch(requestPending(agreementId));
     // check and then return
 
+  }
+}
+
+export function sortAgreements(sortKey: string, sortKind: "ascending" | "descending"): SortAgreementListAction {
+  return {
+    type: 'AGREEMENT_LIST_SORT',
+    payload: {
+      sortKey: sortKey,
+      sortKind: sortKind,
+    }
   }
 }

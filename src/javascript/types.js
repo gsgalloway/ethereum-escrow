@@ -13,6 +13,8 @@ export type reduxStoreType = {
 export type AgreementListState = {
     [agreementId: string]: AgreementType,
     allAgreementIds: Array<string>,
+    sortKey: string,
+    sortKind: "descending" | "ascending",
 };
 
 // single agreement

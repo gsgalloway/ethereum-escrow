@@ -7,7 +7,8 @@ import type {
   ConfirmedAction,
   ConfirmedFailedAction,
   AgreementCanceledAction,
-  AgreementCancelFailedAction
+  AgreementCancelFailedAction,
+  SortAgreementListAction
 } from '../actions/agreementList';
 
 import type {
@@ -23,11 +24,11 @@ type Action =
   | ConfirmedAction
   | ConfirmedFailedAction
   | AgreementCanceledAction
-  | AgreementCancelFailedAction;
+  | AgreementCancelFailedAction
+  | SortAgreementListAction;
 
 // remove this once we get better values
 const PLACEHOLDER_AGREEMENT_ID: string = (123123412312412412).toString();
-
 
 const INITIAL_STATE: AgreementListState = {
   "123123412312412412": {
@@ -48,6 +49,8 @@ const INITIAL_STATE: AgreementListState = {
     requestPending: false,
   },
   allAgreementIds: ["123123412312412412"],
+  sortKey: "date",
+  sortKind: "descending",
 };
 
 export default function agreementListReducer(state: AgreementListState = INITIAL_STATE, action: Action): AgreementListState {
@@ -61,9 +64,13 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
   //   agreementId =  typeof action.payload === 'object' ?  action.payload.agreementId.toString(): action.payload.toString();
   // }
 
-  if (typeof action.payload === 'object') {
+  // REALLY ugly way of making sure that agreementId is in the object, is there
+  // a better solution to this?
+
+  if (typeof action.payload === 'object' && action.payload.agreementId) {
+    //$FlowFixMe
     agreementId = action.payload.agreementId.toString();
-  } else if (action.payload) {
+  } else if (action.payload.agreementId) {
     agreementId = action.payload.toString();
   }
 
@@ -151,7 +158,13 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
           error: "Cancellation failed",
           requestPending: false,
         }
-      }
+      };
+    case 'AGREEMENT_LIST_SORT':
+      return {
+        ...state,
+        sortKey: action.payload.sortKey,
+        sortKind: action.payload.sortKind,
+      };
     default:
       (action: empty);
       return state;
