@@ -4,41 +4,60 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router'
 import { sendMoney, confirmAgreement, cancelAgreement, sortAgreements } from '../actions/agreementList';
 import Agreement from '../components/agreement';
-import type { AgreementListType, AgreementListState, reduxStoreType } from '../types';
+import type { AgreementType, AgreementListType, AgreementListState, reduxStoreType } from '../types';
 import type { AgreementListDispatch } from '../actions/agreementList';
 
 type Props = {
   allAgreementIds: Array<string>,
-  agreementList: AgreementListType,
+  agreementsById: AgreementListType,
   sortKey: string,
   sortKind: "descending" | "ascending",
 };
 
 class AgreementList extends Component {
+  constuctor() {
+    const self: Object = this;
+
+  }
   // map over all agreements using allAgreements as values
   // preferably, use some sort of sorting function to return
   // date, amount, as buyer, as seller, completed
 
+  // also, date ascending is going to be most recent at top
+
+
   render() {
-      return (
+    const agreementList = this.props.allAgreementIds.map((agreementId: string) => {
+      const agreement: AgreementType = this.props.agreementsById[agreementId];
+      <Agreement
+        {...agreement}
+        key={'agreement-' + agreementId}
+        sendMoney={this.props.sendMoney}
+        confirmAgreement={this.props.confirmAgreement}
+        cancelAgreement={this.props.cancelAgreement}
+        sortAgreements={this.props.sortAgreements}
+      />
+    });
+
+    return (
         <ul>
-          <Agreement {...this.props} />
+          {agreementList}
         </ul>
-      );
-    }
-  };
+    );
+  }
+};
 
   const mapStateToProps = (state: reduxStoreType): Props => {
 
     const agreementListObj: AgreementListState = state.agreementList,
           allAgreementIds: Array<string> = agreementListObj.allAgreementIds,
-          agreementList: AgreementListType = agreementListObj.agreementsById,
+          agreementsById: AgreementListType = agreementListObj.agreementsById,
           sortKey: string = agreementListObj.sortKey,
           sortKind: "descending" | "ascending" = agreementListObj.sortKind;
 
     return {
       allAgreementIds,
-      agreementList,
+      agreementsById,
       sortKey,
       sortKind
     };

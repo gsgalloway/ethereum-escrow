@@ -1,8 +1,15 @@
 // @flow
 import React from 'react';
-import type {AgreementListState} from '../types';
+import type {AgreementType} from '../types';
 
-const Agreement = (props: AgreementListState) => {
+type Props = {
+  sendMoney: (agreementId: string, position: "buyer" | "seller") => void,
+  confirmAgreement: (agreementId: string) => void,
+  cancelAgreement: (agreementId: string) => void,
+  sortAgreements: (sortKey: string, sortKind: "ascending" | "descending") => void,
+};
+
+const Agreement = (props: Props & AgreementType) => {
   return (
       <p>Agreement Rendered</p>
   );

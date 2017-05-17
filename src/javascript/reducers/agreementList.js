@@ -31,7 +31,6 @@ type Action =
 // remove this once we get better values
 const PLACEHOLDER_AGREEMENT_ID: string = (123123412312412412).toString();
 
-
 const INITIAL_STATE: AgreementListState = {
     agreementsById: {
       "123123412312412412": {
@@ -53,8 +52,39 @@ const INITIAL_STATE: AgreementListState = {
     },
   },
   allAgreementIds: ["123123412312412412"],
-  sortKey: "date",
-  sortKind: "descending",
+  sortKey: "creationDate",
+  sortKind: "ascending",
+};
+// The logic for changing state either belongs here or in a thunk or sorted
+// repeatedly in the container
+// Descending: Date(New to Old), Price(Largest to smallest)
+function sortAllAgreementIds(state: AgreementListState): Array<string> {
+
+  const sortKey: string = state.sortKey,
+        sortKind: 'ascending' | 'descending' = state.sortKind,
+        allAgreementIds: Array<string> = state.allAgreementIds,
+        agreementsById: AgreementListType = state.agreementsById;
+
+  const sortedAgreements: Array<string> = allAgreementIds.sort((a, b) => {
+
+    const aAgreement: string = agreementsById[a][sortKey];
+    const bAgreement: string = agreementsById[b][sortKey];
+
+    if (sortKind === "ascending") {
+      if (aAgreement < bAgreement) return -1;
+      else if (aAgreement > bAgreement) return 1;
+      return 0;
+
+    } else if (sortKind === "descending") {
+      if (aAgreement > bAgreement) return -1;
+      else if (aAgreement < bAgreement) return 1;
+      return 0;
+    };
+    return 0;
+  });
+
+  return sortedAgreements;
+
 };
 
 export default function agreementListReducer(state: AgreementListState = INITIAL_STATE, action: Action): AgreementListState {
@@ -194,10 +224,12 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
         }
       }
     case 'AGREEMENT_LIST_SORT':
+      const allAgreementIds: Array<string> = sortAllAgreementIds(state);
       return {
         ...state,
         sortKey: action.payload.sortKey,
         sortKind: action.payload.sortKind,
+        allAgreementIds: allAgreementIds,
       };
     default:
       (action: empty);
