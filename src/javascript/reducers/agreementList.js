@@ -110,11 +110,6 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
   let agreementId: string = '';
   let agreement: AgreementType;
 
-  // flow really doesn't like this ternary operator, makes me super sad
-  // if (action.payload) {
-  //   agreementId =  typeof action.payload === 'object' ?  action.payload.agreementId.toString(): action.payload.toString();
-  // }
-
   // REALLY ugly way of making sure that agreementId is in the object, is there
   // a better solution to this?
   if (typeof action.payload === 'object' && action.payload.agreementId) {
