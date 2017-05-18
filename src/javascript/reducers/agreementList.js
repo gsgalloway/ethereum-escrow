@@ -118,7 +118,7 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
   } else if (typeof action.payload === 'string') {
     agreementId = action.payload.toString();
   }
-  // once agreementId is there, get the agreementId object
+  // once agreementId is there, get the agreement object
   // so we can copy with the object spread operator
   if (agreementId !== '') {
     agreement = agreementsById[agreementId];
