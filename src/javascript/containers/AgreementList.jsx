@@ -3,7 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router'
 import { sendMoney, confirmAgreement, cancelAgreement, sortAgreements } from '../actions/agreementList';
-import Agreement from '../components/agreement';
+import Agreement from '../components/Agreement';
+import AgreementListNav from '../components/AgreementListNav';
 import type { AgreementType, AgreementListType, AgreementListState, reduxStoreType } from '../types';
 import type { AgreementListDispatch } from '../actions/agreementList';
 
@@ -29,20 +30,27 @@ class AgreementList extends Component {
   render() {
     const agreementList = this.props.allAgreementIds.map((agreementId: string) => {
       const agreement: AgreementType = this.props.agreementsById[agreementId];
-      <Agreement
-        {...agreement}
-        key={'agreement-' + agreementId}
-        sendMoney={this.props.sendMoney}
-        confirmAgreement={this.props.confirmAgreement}
-        cancelAgreement={this.props.cancelAgreement}
-        sortAgreements={this.props.sortAgreements}
-      />
+      return(
+        <Agreement
+          {...agreement}
+          key={'agreement-' + agreementId}
+          sendMoney={this.props.sendMoney}
+          confirmAgreement={this.props.confirmAgreement}
+          cancelAgreement={this.props.cancelAgreement}
+
+        />
+      );
     });
 
     return (
-        <ul>
+        <div>
+          <AgreementListNav
+            sortKey={this.props.sortKey}
+            sortKind={this.props.sortKind}
+            sortAgreements={this.props.sortAgreements}
+          />
           {agreementList}
-        </ul>
+        </div>
     );
   }
 };

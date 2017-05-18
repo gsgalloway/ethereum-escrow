@@ -50,19 +50,35 @@ const INITIAL_STATE: AgreementListState = {
       canceledDate: 1493690737506,
       requestPending: false,
     },
+      "123123412312412413": {
+      creationDate: 1493690737488,
+      position: "buyer",
+      price: 1235,
+      buyer: "123.12.23.21",
+      seller: "1231.123.12.1231",
+      buyerPaid: true,
+      buyerPaidDate: 1493690737489,
+      sellerPaid: true,
+      sellerPaidDate: 1493690737496,
+      agreementComplete: false,
+      agreementCompleteDate: 0,
+      error: "",
+      canceled: false,
+      canceledDate: 1493690737503,
+      requestPending: false,
+    },
   },
-  allAgreementIds: ["123123412312412412"],
+  allAgreementIds: ["123123412312412412","123123412312412413"],
   sortKey: "creationDate",
-  sortKind: "ascending",
+  sortKind: "descending",
 };
+
 // The logic for changing state either belongs here or in a thunk or sorted
 // repeatedly in the container
 // Descending: Date(New to Old), Price(Largest to smallest)
-function sortAllAgreementIds(state: AgreementListState): Array<string> {
+function sortAllAgreementIds(state: AgreementListState, sortKey: string, sortKind: "descending" | "ascending"): Array<string> {
 
-  const sortKey: string = state.sortKey,
-        sortKind: 'ascending' | 'descending' = state.sortKind,
-        allAgreementIds: Array<string> = state.allAgreementIds,
+  const allAgreementIds: Array<string> = state.allAgreementIds,
         agreementsById: AgreementListType = state.agreementsById;
 
   const sortedAgreements: Array<string> = allAgreementIds.sort((a, b) => {
@@ -224,11 +240,13 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
         }
       }
     case 'AGREEMENT_LIST_SORT':
-      const allAgreementIds: Array<string> = sortAllAgreementIds(state);
+      const sortKey = action.payload.sortKey;
+      const sortKind = action.payload.sortKind;
+      const allAgreementIds: Array<string> = sortAllAgreementIds(state, sortKey, sortKind);
       return {
         ...state,
-        sortKey: action.payload.sortKey,
-        sortKind: action.payload.sortKind,
+        sortKey: sortKey,
+        sortKind: sortKind,
         allAgreementIds: allAgreementIds,
       };
     default:
