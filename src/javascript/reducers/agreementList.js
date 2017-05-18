@@ -105,10 +105,9 @@ function sortAllAgreementIds(state: AgreementListState, sortKey: string, sortKin
 
 export default function agreementListReducer(state: AgreementListState = INITIAL_STATE, action: Action): AgreementListState {
   // set agreementId, and check if payload passes an object with an error
-  // or passes just the agreement int. This could be a very long
-
+  // or passes just the agreement id
+  const agreementsById: AgreementListType = state.agreementsById;
   let agreementId: string = '';
-  let agreementsById: AgreementListType;
   let agreement: AgreementType;
 
   // flow really doesn't like this ternary operator, makes me super sad
@@ -118,19 +117,17 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
 
   // REALLY ugly way of making sure that agreementId is in the object, is there
   // a better solution to this?
-
   if (typeof action.payload === 'object' && action.payload.agreementId) {
     //$FlowFixMe
     agreementId = action.payload.agreementId.toString();
   } else if (typeof action.payload === 'string') {
     agreementId = action.payload.toString();
   }
+  // once agreementId is there, get the agreementId object
+  // so we can copy with the object spread operator
   if (agreementId !== '') {
-    agreementsById = state.agreementsById;
     agreement = agreementsById[agreementId];
   }
-
-
 
   switch (action.type) {
     case 'REQUEST_PENDING':
@@ -238,7 +235,8 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
             requestPending: false,
           }
         }
-      }
+      };
+    // sorting
     case 'AGREEMENT_LIST_SORT':
       const sortKey = action.payload.sortKey;
       const sortKind = action.payload.sortKind;
