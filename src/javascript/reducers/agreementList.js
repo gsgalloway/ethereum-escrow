@@ -145,7 +145,7 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
           [agreementId]: {
             ...agreement,
             buyerPaid: true,
-            buyerPaidDate: Date.now(),
+            buyerPaidDate: action.payload.timestamp,
             error: "",
             requestPending: false,
           },
@@ -159,7 +159,7 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
           [agreementId]: {
             ...agreement,
             senderPaid: true,
-            senderPaidDate: Date.now(),
+            senderPaidDate: action.payload.timestamp,
             error: "",
             requestPending: false,
           },
@@ -186,7 +186,7 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
           [agreementId]: {
             ...agreement,
             transationComplete: true,
-            transationCompleteDate: Date.now(),
+            transationCompleteDate: action.payload.timestamp,
             error: "",
             requestPending: false,
           },
@@ -213,7 +213,7 @@ export default function agreementListReducer(state: AgreementListState = INITIAL
           [agreementId]: {
             ...agreement,
             canceled: true,
-            canceledDate: Date.now(),
+            canceledDate: action.payload.timestamp,
             error: "",
             requestPending: false,
           },
