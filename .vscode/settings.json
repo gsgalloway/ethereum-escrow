@@ -1,0 +1,7 @@
+{
+  "eslint.enable": false,
+  "javascript.validate.enable": false,
+  "files.associations": {
+    "*.js": "flow"
+  }
+}
