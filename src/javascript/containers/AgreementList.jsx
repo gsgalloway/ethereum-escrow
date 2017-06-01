@@ -32,12 +32,12 @@ class AgreementList extends Component {
       const agreement: AgreementType = this.props.agreementsById[agreementId];
       return(
         <Agreement
+          agreementId={agreementId}
           {...agreement}
           key={'agreement-' + agreementId}
           sendMoney={this.props.sendMoney}
           confirmAgreement={this.props.confirmAgreement}
           cancelAgreement={this.props.cancelAgreement}
-
         />
       );
     });
