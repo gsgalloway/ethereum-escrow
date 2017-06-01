@@ -16,10 +16,14 @@ const AgreementListNav = (props: Props) => {
     }
     return props.sortAgreements(key, 'ascending');
   }
-
+  // TODO: agree on if these are the only sorts that we want to do
   return (
     <div>
       <button type="button" onClick={() => handleSort("creationDate")}>creationDate</button>
+      <button type="button" onClick={() => handleSort("price")}>price</button>
+      <button type="button" onClick={() => handleSort("agreementCompleteDate")}>agreementCompleteDate</button>
+      <button type="button" onClick={() => handleSort("canceledDate")}>canceledDate</button>
+      
     </div>
   );
 
