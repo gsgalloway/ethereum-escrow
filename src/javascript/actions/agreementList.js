@@ -10,7 +10,7 @@ export type ConfirmedAction = { type: 'CONFIRMED', payload: {agreementId: number
 export type ConfirmedFailedAction = { type: 'CONFIRM_FAILED', payload: number };
 export type AgreementCanceledAction = { type: 'AGREEMENT_CANCELED', payload: {agreementId: number, timestamp: number} };
 export type AgreementCancelFailedAction = { type: 'AGREEMENT_CANCEL_FAILED', payload: number };
-export type SortAgreementListAction = { type: 'AGREEMENT_LIST_SORT', payload: {sortKey: string, sortKind: "ascending" | "descending"}}
+export type SortAgreementListAction = { type: 'AGREEMENT_LIST_SORT', payload: {sortKey: string, sortKind: "ascending" | "descending"}};
 
 type Action =
   | RequestPendingAction
@@ -35,37 +35,26 @@ function requestPending(agreementId: string): RequestPendingAction {
   }
 }
 
-// TODO: combine copy-pasted code from buyerSendsMoney and sellerSendsMoney
-function buyerSendsMoney(agreementId: number): ThunkAction {
-  return function (dispatch) {
-    return trustlessEscrowContract.deployed().then((instance: TrustlessEscrowInstance) => {
-      let buyersCost;
-      // TODO: Need to pass timestamp
-      return instance.agreements.call(agreementId)
-          .then((agreementStruct: any[]) => {
-            buyersCost = agreementStruct[2].times(2);
-          })
-          .then(() => instance.buyerConfirmsAgreement(agreementId, {value: buyersCost}))
-          .then(() => {return {type: 'BUYER_SENT', payload: {agreementId: agreementId, timestamp: timestamp}}})
-          .catch((e) => dispatch(sendingMoneyFailed(agreementId)))
-      });
+function buyerSendsMoney(agreementId: number, timestamp: any): BuyerSentAction {
+  return {
+    type: 'BUYER_SENT', 
+    payload: {
+      agreementId: agreementId, 
+      timestamp: timestamp
+    }
   }
 }
-function sellerSendsMoney(agreementId: number, error: any): ThunkAction {
-  return function (dispatch) {
-    return trustlessEscrowContract.deployed().then((instance: TrustlessEscrowInstance) => {
-      let sellersCost;
-      // TODO: Need to pass timestamp
-      return instance.agreements.call(agreementId)
-          .then((agreementStruct: any[]) => {
-            sellersCost = agreementStruct[2];
-          })
-          .then(() => instance.sellerConfirmsAgreement(agreementId, {value: sellersCost}))
-          .then(() => {return {type: 'SELLER_SENT', payload: {agreementId: agreementId, timestamp: timestamp}}})
-          .catch((e) => dispatch(sendingMoneyFailed(agreementId)))
-      });
+
+function sellerSendsMoney(agreementId: number, timestamp: any): SellerSentAction {
+ return {
+   type: 'SELLER_SENT', 
+    payload: {
+      agreementId: agreementId, 
+      timestamp: timestamp
+    }
   }
 }
+
 function sendingMoneyFailed(agreementId: number, error: any): SendFailedAction {
   return {
     type: 'SEND_FAILED',
@@ -75,21 +64,44 @@ function sendingMoneyFailed(agreementId: number, error: any): SendFailedAction {
     }
   }
 }
+
 export function sendMoney(agreementId: string, position: "buyer" | "seller"):ThunkAction {
   // convert agreementId to number
   const _agreementId: number = Number(agreementId);
 
   return (dispatch) => {
-    // as always, return a spinner
+    // return a spinner
     dispatch(requestPending(agreementId));
-    //TODO: need to add the correct reducers
 
-    if (position === "buyer")
-      return dispatch(buyerSendsMoney(_agreementId));
-    else
-      return dispatch(sellerSendsMoney(_agreementId));
+    return (dispatch) => {
+      return trustlessEscrowContract.deployed().then((instance: TrustlessEscrowInstance) => {
+        // assign a generic cost TODO: assign correct value
+        let userCost: any;
+        // TODO: Need to pass timestamp
+        return instance.agreements.call(agreementId).then(
+          (agreementStruct: any[]) => {
+            userCost = agreementStruct[2].times(2);
+          })
+          .then(() => {
+            // this is where we check by party, then dispatch the correct action if there is no error
+            if (position === "buyer") { 
+              instance.sellerConfirmsAgreement(agreementId, {value: userCost})
+              .then(() => {
+                dispatch(buyerSendsMoney(_agreementId, timestamp));
+              });
+            } else if (position === "seller") {
+              instance.buyerConfirmsAgreement(agreementId, {value: userCost})
+              .then(() => {
+                dispatch(sellerSendsMoney(_agreementId, timestamp));
+              });
+            }
+          })
+          .catch((e) => dispatch(sendingMoneyFailed(agreementId)));
+      });
+    }
   }
 }
+
 function confirmAgreementSuccess(agreementId: number, timestamp: number): ConfirmedAction {
   return {
     type: 'CONFIRMED',
@@ -99,16 +111,17 @@ function confirmAgreementSuccess(agreementId: number, timestamp: number): Confir
     },
   }
 }
+
 function confirmAgreementFailed(agreementId: number): ConfirmedFailedAction {
   return {
     type: 'CONFIRM_FAILED',
     payload: agreementId,
   }
 }
+
 export function confirmAgreement(agreementId: string): ThunkAction {
   // convert agreementId to number
   const _agreementId: number = Number(agreementId);
-
   return (dispatch) => {
     dispatch(requestPending(agreementId));
     // check that the transaction was finished
