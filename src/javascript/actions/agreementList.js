@@ -3,13 +3,14 @@ import trustlessEscrowContract from '../web3';
 (trustlessEscrowContract: Contract<TrustlessEscrowInstance>);
 
 export type RequestPendingAction = { type: 'REQUEST_PENDING', payload: string  };
-export type BuyerSentAction = { type: 'BUYER_SENT', payload: number };
-export type SellerSentAction = { type: 'SELLER_SENT', payload: number };
+export type BuyerSentAction = { type: 'BUYER_SENT', payload: {agreementId: number, timestamp: number} };
+export type SellerSentAction = { type: 'SELLER_SENT', payload: {agreementId: number, timestamp: number} };
 export type SendFailedAction = { type: 'SEND_FAILED', payload: {agreementId: number, error: any} };
-export type ConfirmedAction = { type: 'CONFIRMED', payload: number };
+export type ConfirmedAction = { type: 'CONFIRMED', payload: {agreementId: number, timestamp: number} };
 export type ConfirmedFailedAction = { type: 'CONFIRM_FAILED', payload: number };
-export type AgreementCanceledAction = { type: 'AGREEMENT_CANCELED', payload: number };
+export type AgreementCanceledAction = { type: 'AGREEMENT_CANCELED', payload: {agreementId: number, timestamp: number} };
 export type AgreementCancelFailedAction = { type: 'AGREEMENT_CANCEL_FAILED', payload: number };
+export type SortAgreementListAction = { type: 'AGREEMENT_LIST_SORT', payload: {sortKey: string, sortKind: "ascending" | "descending"}}
 
 type Action =
   | RequestPendingAction
@@ -19,7 +20,8 @@ type Action =
   | ConfirmedAction
   | ConfirmedFailedAction
   | AgreementCanceledAction
-  | AgreementCancelFailedAction;
+  | AgreementCancelFailedAction
+  | SortAgreementListAction;
 
 export type AgreementListDispatch = (action: Action | ThunkAction | PromiseAction) => any;
 type GetState = () => Object;
@@ -38,12 +40,13 @@ function buyerSendsMoney(agreementId: number): ThunkAction {
   return function (dispatch) {
     return trustlessEscrowContract.deployed().then((instance: TrustlessEscrowInstance) => {
       let buyersCost;
+      // TODO: Need to pass timestamp
       return instance.agreements.call(agreementId)
           .then((agreementStruct: any[]) => {
             buyersCost = agreementStruct[2].times(2);
           })
           .then(() => instance.buyerConfirmsAgreement(agreementId, {value: buyersCost}))
-          .then(() => {return {type: 'BUYER_SENT', payload: agreementId}})
+          .then(() => {return {type: 'BUYER_SENT', payload: {agreementId: agreementId, timestamp: timestamp}}})
           .catch((e) => dispatch(sendingMoneyFailed(agreementId)))
       });
   }
@@ -52,12 +55,13 @@ function sellerSendsMoney(agreementId: number, error: any): ThunkAction {
   return function (dispatch) {
     return trustlessEscrowContract.deployed().then((instance: TrustlessEscrowInstance) => {
       let sellersCost;
+      // TODO: Need to pass timestamp
       return instance.agreements.call(agreementId)
           .then((agreementStruct: any[]) => {
             sellersCost = agreementStruct[2];
           })
           .then(() => instance.sellerConfirmsAgreement(agreementId, {value: sellersCost}))
-          .then(() => {return {type: 'SELLER_SENT', payload: agreementId}})
+          .then(() => {return {type: 'SELLER_SENT', payload: {agreementId: agreementId, timestamp: timestamp}}})
           .catch((e) => dispatch(sendingMoneyFailed(agreementId)))
       });
   }
@@ -86,10 +90,13 @@ export function sendMoney(agreementId: string, position: "buyer" | "seller"):Thu
       return dispatch(sellerSendsMoney(_agreementId));
   }
 }
-function confirmAgreementSuccess(agreementId: number): ConfirmedAction {
+function confirmAgreementSuccess(agreementId: number, timestamp: number): ConfirmedAction {
   return {
     type: 'CONFIRMED',
-    payload: agreementId,
+    payload: {
+      agreementId: agreementId,
+      timestamp: timestamp
+    },
   }
 }
 function confirmAgreementFailed(agreementId: number): ConfirmedFailedAction {
@@ -111,7 +118,10 @@ export function confirmAgreement(agreementId: string): ThunkAction {
 function canceledAgreement(agreementId: number): AgreementCanceledAction {
   return {
     type: 'AGREEMENT_CANCELED',
-    payload: agreementId,
+    payload: {
+      agreementId: agreementId,
+      timestamp: timestamp
+    },
   }
 }
 function cancelAgreementFailed(agreementId: number): AgreementCancelFailedAction {
@@ -127,6 +137,17 @@ export function cancelAgreement(agreementId: string): ThunkAction {
   return (dispatch) => {
     dispatch(requestPending(agreementId));
     // check and then return
+    // TODO: Need to pass timestamp to canceledAgreement
 
+  }
+}
+
+export function sortAgreements(sortKey: string, sortKind: "ascending" | "descending"): SortAgreementListAction {
+  return {
+    type: 'AGREEMENT_LIST_SORT',
+    payload: {
+      sortKey: sortKey,
+      sortKind: sortKind,
+    }
   }
 }
