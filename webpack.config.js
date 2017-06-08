@@ -48,7 +48,7 @@ module.exports = {
       { from: './src/index.html', to: "index.html" },
       { from: './src/images', to: "images" },
     ]),
-    new ExtractTextPlugin("app.css"),
+    new ExtractTextPlugin("app.css")
   ],
   resolve: {
     fallback: path.join(__dirname, "node_modules"),

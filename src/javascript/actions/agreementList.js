@@ -78,25 +78,25 @@ export function sendMoney(agreementId: string, position: "buyer" | "seller"):Thu
         // assign a generic cost TODO: assign correct value
         let userCost: any;
         // TODO: Need to pass timestamp
-        return instance.agreements.call(agreementId).then(
+        return instance.agreements.call(_agreementId).then(
           (agreementStruct: any[]) => {
             userCost = agreementStruct[2].times(2);
           })
           .then(() => {
             // this is where we check by party, then dispatch the correct action if there is no error
             if (position === "buyer") { 
-              instance.sellerConfirmsAgreement(agreementId, {value: userCost})
+              instance.sellerConfirmsAgreement(_agreementId, {value: userCost})
               .then(() => {
                 dispatch(buyerSendsMoney(_agreementId, timestamp));
               });
             } else if (position === "seller") {
-              instance.buyerConfirmsAgreement(agreementId, {value: userCost})
+              instance.buyerConfirmsAgreement(_agreementId, {value: userCost})
               .then(() => {
                 dispatch(sellerSendsMoney(_agreementId, timestamp));
               });
             }
           })
-          .catch((e) => dispatch(sendingMoneyFailed(agreementId)));
+          .catch((e) => dispatch(sendingMoneyFailed(_agreementId)));
       });
     }
   }
