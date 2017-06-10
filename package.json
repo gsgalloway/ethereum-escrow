@@ -4,7 +4,7 @@
   "description": "",
   "main": "app/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "truffle build && truffle test ./build/test.js",
     "dev": "webpack-dev-server",
     "hot-dev-server": "webpack-dev-server --config webpack-hot-dev-server.config.js --hot --progress --colors --port 2992 --inline",
     "build": "webpack",

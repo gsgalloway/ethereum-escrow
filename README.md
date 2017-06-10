@@ -58,4 +58,4 @@ Here's some setup instructions for use with EthereumJS TestRPC and MetaMask in C
 
 ## Running Tests
 
-The tests use Flow, so run `truffle build` to compile the tests and then run `truffle test ./build/test.js`
+Run `npm test` to test compiled Flow code from the `./build/test.js` directory
