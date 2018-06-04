@@ -13,6 +13,8 @@ services:
       - "8080:8080"
     environment:
       ETH_NODE_HOST: ganache
+    depends_on:
+      - ganache
     command: bash ./scripts/dev_server.sh
 
   ganache:
