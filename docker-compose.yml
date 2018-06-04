@@ -6,15 +6,17 @@ services:
     build:
       context: ./app
     volumes:
-      - .:/usr/src/app
+      - ./app:/usr/src/app
       - /usr/src/app/node_modules
+      - /usr/src/app/build
     ports:
-      - "8080"
+      - "8080:8080"
     environment:
       ETH_NODE_HOST: ganache
+    command: bash ./scripts/dev_server.sh
 
   ganache:
     build:
       context: ./ganache
-    ports:
+    expose:
       - "8545"
