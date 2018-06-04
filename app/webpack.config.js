@@ -3,6 +3,7 @@ var path = require('path');
 var webpack = require("webpack");
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var AsyncAwaitPlugin = require('webpack-async-await') ;
 
 var environment = process.env.NODE_ENV || "development";
 
@@ -35,10 +36,11 @@ module.exports = {
       { test: /\.(js|jsx|es6)$/, exclude: /node_modules/, loader: "babel-loader"},
       { test: /\.scss$/i, loader: ExtractTextPlugin.extract(["css", "sass"])},
       { test: /\.css$/, loader: "style-loader!css-loader" },
-      { test: /\.json$/i, loader: "json"}
+      { test: /\.json$/i, loader: "json-loader"}
     ]
   },
   plugins: [
+    new AsyncAwaitPlugin({}),
     new webpack.DefinePlugin({
         ENV: '"' + process.env.NODE_ENV + '"',
         WEB3_PROVIDER_LOCATION: '"' + process.env.WEB3_PROVIDER_LOCATION + '"'
@@ -51,11 +53,11 @@ module.exports = {
     new ExtractTextPlugin("app.css"),
   ],
   resolve: {
-    fallback: path.join(__dirname, "node_modules"),
-    extensions: ["", ".js", ".jsx"]
+    // fallback: path.join(__dirname, "node_modules"),
+    extensions: [".js", ".jsx"]
   },
   resolveLoader: {
-    fallback: path.join(__dirname, "node_modules"),
-    extensions: ["", ".js", ".jsx"]
+    // fallback: path.join(__dirname, "node_modules"),
+    extensions: [".js", ".jsx"]
   }
 };

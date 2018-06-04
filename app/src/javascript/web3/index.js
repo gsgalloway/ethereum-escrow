@@ -30,7 +30,7 @@ var TrustlessEscrow = contract(trustless_escrow_artifacts);
 TrustlessEscrow.setProvider(_web3Instance.currentProvider);
 
 // TODO: Remove these two lines
-window.web3 = _web3Instance;
-window.TrustlessEscrow = TrustlessEscrow;
+// window.web3 = _web3Instance;
+// window.TrustlessEscrow = TrustlessEscrow;
 
 export default TrustlessEscrow;

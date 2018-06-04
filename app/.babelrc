@@ -1,10 +1,17 @@
 {
   "ignore": ["*.min.js"],
   "compact": false,
-  "presets": ["es2015", "react", "flow"],
+  "presets": [
+    ["env", {
+      "targets": {
+        "browsers": ["last 2 Chrome versions"]
+      }
+    }],
+    "react",
+    "flow"],
   "plugins": [
     "transform-object-rest-spread",
     "transform-flow-comments",
-    ["babel-plugin-transform-builtin-extend", {globals: ["Error"]}],
+    ["babel-plugin-transform-builtin-extend", {"globals": ["Error"]}]
   ]
 }
