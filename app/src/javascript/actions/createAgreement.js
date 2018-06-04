@@ -1,6 +1,5 @@
 // @flow
-import trustlessEscrowContract from '../web3';
-(trustlessEscrowContract: Contract<TrustlessEscrowInstance>);
+import { getTrustlessEscrowContract } from '../web3';
 
 export type PendingAction = { type: 'CREATE_AGREEMENT_PENDING' };
 export type FulfilledAction = { type: 'CREATE_AGREEMENT_FULFILLED', payload: string };
@@ -58,7 +57,7 @@ export function createAgreement(buyer: string, seller: string, price: number, tx
 
     // In this case, we return a promise to wait for.
     // This is not required by thunk middleware, but it is convenient for us.
-    return trustlessEscrowContract.deployed()
+    return getTrustlessEscrowContract().deployed()
       .then((instance: TrustlessEscrowInstance) => instance.createAgreement(buyer, seller, price, txOptions))
       .then((txResult: TransactionResult) => dispatch(createAgreementFulfilled(txResult.tx)))
       .catch((e: string) => dispatch(createAgreementFailed(e)));

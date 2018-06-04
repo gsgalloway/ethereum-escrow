@@ -1,6 +1,5 @@
 // @flow
-import trustlessEscrowContract from '../web3';
-(trustlessEscrowContract: Contract<TrustlessEscrowInstance>);
+import { getTrustlessEscrowContract } from '../web3';
 
 export type RequestPendingAction = { type: 'REQUEST_PENDING', payload: string  };
 export type BuyerSentAction = { type: 'BUYER_SENT', payload: {agreementId: number, timestamp: number} };
@@ -38,7 +37,7 @@ function requestPending(agreementId: string): RequestPendingAction {
 // TODO: combine copy-pasted code from buyerSendsMoney and sellerSendsMoney
 function buyerSendsMoney(agreementId: number): ThunkAction {
   return function (dispatch) {
-    return trustlessEscrowContract.deployed().then((instance: TrustlessEscrowInstance) => {
+    return getTrustlessEscrowContract().deployed().then((instance: TrustlessEscrowInstance) => {
       let buyersCost;
       // TODO: Need to pass timestamp
       return instance.agreements.call(agreementId)
@@ -53,7 +52,7 @@ function buyerSendsMoney(agreementId: number): ThunkAction {
 }
 function sellerSendsMoney(agreementId: number, error: any): ThunkAction {
   return function (dispatch) {
-    return trustlessEscrowContract.deployed().then((instance: TrustlessEscrowInstance) => {
+    return getTrustlessEscrowContract().deployed().then((instance: TrustlessEscrowInstance) => {
       let sellersCost;
       // TODO: Need to pass timestamp
       return instance.agreements.call(agreementId)

@@ -1,61 +1,40 @@
 // @flow
+import configureStore from 'redux-mock-store';
+import thunkMiddleware from 'redux-thunk';
+import { createAgreement, Action as CreateAgreementAction } from '../../src/javascript/actions/createAgreement.js';
+import { setTrustlessEscrowContract } from "../../src/javascript/web3";
+
 declare var artifacts: Artifacts;
 
-let TrustlessEscrow = artifacts.require("TrustlessEscrow");
+let trustlessEscrowContract: Contract<TrustlessEscrowInstance> = artifacts.require("TrustlessEscrow");
+
+const mockStore = configureStore([thunkMiddleware]);
 
 contract('createAgreement', function(accounts: string[]): void {
-    describe.skip("createAgreementPending");
+    const buyer = accounts[0];
+    const seller = accounts[1];
 
-    describe.skip("createAgreementFulfilled");
+    beforeEach('wire up truffle test artifacts', function() {
+        setTrustlessEscrowContract(trustlessEscrowContract);
+    });
 
-    describe.skip("createAgreementFailed");
+    describe('when called', function() {
+        it('should work', async function() {
+            const store = mockStore();
+            await trustlessEscrowContract.deployed();
+            await store.dispatch(createAgreement(buyer, seller, 10));
+            const observedActions: CreateAgreementAction[] = store.getActions();
+            assert.lengthOf(observedActions, 2);
+            assert.equal(observedActions[0].type, 'CREATE_AGREEMENT_PENDING');
+            assert.equal(observedActions[1].type, 'CREATE_AGREEMENT_FULFILLED');
+        });
+    });
 
-    describe.skip("createAgreement");
+    describe.skip("createAgreementPending", function(){});
+
+    describe.skip("createAgreementFulfilled", function(){});
+
+    describe.skip("createAgreementFailed", function(){});
+
+    describe.skip("createAgreement", function(){});
 });
-
-
-// export function createAgreementPending(): PendingAction {
-//   return {
-//     type: 'CREATE_AGREEMENT_PENDING'
-//   };
-// }
-
-// export function createAgreementFulfilled(transactionHash: string): FulfilledAction {
-//   return {
-//     type: 'CREATE_AGREEMENT_FULFILLED',
-//     payload: transactionHash
-//   };
-// }
-
-// export function createAgreementFailed(error: string): FailedAction{
-//   return {
-//     type: 'CREATE_AGREEMENT_FAILED',
-//     payload: error
-//   };
-// }
-
-// // transaction options will be "any" for now
-// export function createAgreement(buyer: string, seller: string, price: string, txOptions: any): ThunkAction {
-
-//   // Thunk middleware knows how to handle functions.
-//   // It passes the dispatch method as an argument to the function,
-//   // thus making it able to dispatch actions itself.
-
-//   return function (dispatch) {
-
-//     // First dispatch: the app state is updated to inform
-//     // that the API call is starting.
-
-//     dispatch(createAgreementPending());
-
-//     // The function called by the thunk middleware can return a value,
-//     // that is passed on as the return value of the dispatch method.
-
-//     // In this case, we return a promise to wait for.
-//     // This is not required by thunk middleware, but it is convenient for us.
-//     return TrustlessEscrow.deployed()
-//       .then(escrowContract => escrowContract.createAgreement(buyer, seller, price, txOptions))
-//       .then(txHash => dispatch(createAgreementFulfilled(txHash)))
-//       .catch(e => dispatch(createAgreementFailed(e)));
-//   }
-// }
