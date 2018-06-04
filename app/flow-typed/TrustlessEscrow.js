@@ -1,6 +1,6 @@
 declare class TrustlessEscrowInstance extends ContractInstance {
   createAgreement: {
-    (buyerAddress: string, sellerAddress: string, value: number): Promise<TransactionResult>,
+    (buyerAddress: string, sellerAddress: string, value: number, txOptions?: TxParams): Promise<TransactionResult>,
     // call: ()
   },
   numAgreements: {
