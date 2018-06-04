@@ -15,12 +15,12 @@ module.exports = {
   networks: {
     "development": {
       network_id: "default",
-      host: "localhost",
+      host: process.env.ETH_NODE_HOST ? process.env.ETH_NODE_HOST : "localhost",
       port: 8545
     }
   },
   rpc: {
-    host: "localhost",
+    host: process.env.ETH_NODE_HOST ? process.env.ETH_NODE_HOST : "localhost",
     port: 8545
   }
 };
